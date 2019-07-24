@@ -15,18 +15,48 @@
 void	sys_out_rooms(t_rooms *begin)
 {
 	t_rooms *tmp;
-	t_rooms *tmp_sub;
+	// t_rooms *tmp_sub;
 
 	tmp = begin;
 	while (tmp)
 	{
-		ft_printf("name = |%s| id |%i|\n", tmp->name, tmp->id);
-		tmp_sub = tmp->sub;
-		while (tmp_sub)
-		{
-			ft_printf("sub name = |%s| id |%i|\n", tmp_sub->name, tmp_sub->id);
-		}
+		ft_printf("name = |%s| id = |%i| dist = |%i|\n", tmp->name, tmp->id, tmp->dist);
+		// tmp_sub = tmp->sub;
+		// while (tmp_sub)
+		// {
+		// 	ft_printf("sub name = |%s| id |%i|\n", tmp_sub->name, tmp_sub->id);
+		// 	tmp_sub = tmp_sub->next;
+		// }
 		ft_printf("------------------\n");
 		tmp = tmp->next;
 	}
+
+}
+
+void	sys_out_dist(int *dist, int n)
+{
+	int	i;
+
+	i = 0;
+	ft_printf("DIST : ");
+	while (i < n)
+	{
+		ft_printf("%i ", dist[i]);
+		i++;
+	}
+	ft_printf("\n");
+}
+
+void	sys_print_queue(t_queue *queue)
+{
+	t_queue *iter_queue;
+
+	iter_queue = queue;
+	ft_printf("QUEUE : ");
+	while (iter_queue)
+	{
+		ft_printf("%i ", iter_queue->id);
+		iter_queue = iter_queue->next;
+	}
+	ft_printf("\n");
 }

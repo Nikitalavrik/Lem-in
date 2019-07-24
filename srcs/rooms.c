@@ -21,6 +21,7 @@ t_rooms		*create_room(void)
 	room->sub = NULL;
 	room->next = NULL;
 	room->id = 0;
+	room->dist = 0;
 	return (room);
 }
 

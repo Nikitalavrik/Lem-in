@@ -29,7 +29,7 @@ int		add_name(char *line, t_rooms *room, int id)
 	return (1);
 }
 
-int		parsing(t_rooms *begin)
+int		parsing(t_rooms *begin, int fd)
 {
 	char	*line;
 	int		num_of_ants;
@@ -40,9 +40,9 @@ int		parsing(t_rooms *begin)
 	num_of_ants = 0;
 	id = 0;
 	room = begin;
-	while (get_next_line(0, &line) && line[0] != '\n')
+	while (get_next_line(fd, &line) && line[0] != '\n')
 	{
-		if (ft_strncmp(line, "##", 2))
+		if (ft_strncmp(line, "#", 1))
 		{
 			if (!ft_get_index(line, '-') && num_of_ants)
 			{

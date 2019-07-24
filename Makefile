@@ -15,7 +15,9 @@ NAME = lem-in
 SRC =	main.c			\
 		rooms.c			\
 		parsing.c		\
-		sys_output.c
+		sys_output.c	\
+		bfs.c			\
+		queue.c			\
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
@@ -32,11 +34,11 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 all: $(NAME) 
 
 $(NAME): $(PRINTF) $(LIB) $(OBJS)
-		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME)
+		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g
 	
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		@mkdir -p $(OBJ_DIR)
-		@$(CC) $(FLAGS) -o $@ -c $< -I $(H_DIR)
+		@$(CC) $(FLAGS) -o $@ -c $< -I $(H_DIR) -g
 
 $(LIB):
 	@make -C ./libft/

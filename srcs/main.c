@@ -14,11 +14,25 @@
 
 int		main(void)
 {
-	t_rooms *begin;
+	// t_queue *queue;
 
+	// queue = create_queue();
+	// // queue->id = 0;
+	// // push_queue(&queue);
+	// // queue->id = 1;
+	// // push_queue(&queue);
+	// // queue->id = 2;
+	// sys_print_queue(queue);
+	t_rooms *begin;
+	int		sum;
+	int		fd;
+
+	sum = 0;
+	fd = open("test/tst1", O_RDONLY);
 	begin = create_room();
-	if (parsing(begin))
+	if (parsing(begin, fd))
 	{
+		bfs(begin, sum);
 		sys_out_rooms(begin);
 	}
 	else
