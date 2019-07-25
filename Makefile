@@ -18,6 +18,7 @@ SRC =	main.c			\
 		sys_output.c	\
 		bfs.c			\
 		queue.c			\
+		find_way.c		\
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror

@@ -21,7 +21,8 @@ t_rooms		*create_room(void)
 	room->sub = NULL;
 	room->next = NULL;
 	room->id = 0;
-	room->dist = 0;
+	room->dist = INT16_MAX;
+	room->path = 1;
 	return (room);
 }
 
@@ -59,11 +60,6 @@ t_rooms		*find_room(t_rooms * begin, char *room_name)
 
 void		find_add_sub(t_rooms *begin, char *line)
 {
-	// t_rooms	*room;
-
-	// room = add_room(&begin->sub);
-	// room->name = ft_strdup(line);
-	// room->id = 999;
 	int		pos_slesh;
 	char	*room_name;
 	t_rooms	*sub_room;
@@ -90,5 +86,16 @@ void		find_add_sub(t_rooms *begin, char *line)
 	sub_room = add_room(&room_sub_room->sub);
 	sub_room->id = room->id;
 	sub_room->name = room->name;
-	// ft_printf("NAME OF NODE : %s\n", )
+}
+
+t_rooms		*go_end(t_rooms *begin)
+{
+	t_rooms	*iter_rooms;
+
+	iter_rooms = begin;
+	while (iter_rooms->next)
+	{
+		iter_rooms = iter_rooms->next;
+	}
+	return (iter_rooms);
 }

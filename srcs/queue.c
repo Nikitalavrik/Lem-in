@@ -23,12 +23,13 @@ t_queue		*create_queue()
 	return (queue);
 }
 
-void		push_queue(t_queue **queue)
+void		push_queue(t_queue **queue, char *name)
 {
 	t_queue	*front;
 
 	front = create_queue();
 	front->next = (*queue);
+	front->name = name;
 	(*queue) = front;
 }
 
@@ -36,8 +37,10 @@ void		pop_queue(t_queue **queue)
 {
 	t_queue	*del;
 
-	
 	del = (*queue);
-	(*queue) = (*queue)->next;
-	free(del);
+	if (del)
+	{
+		(*queue) = (*queue)->next;
+		free(del);
+	}
 }

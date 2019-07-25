@@ -29,7 +29,7 @@ t_rooms	*go_throught(t_rooms *begin, int steps)
 	return (iter_room);
 }
 
-int			bfs(t_rooms *begin, int sum)
+int			dijkstra(t_rooms *begin, int sum)
 {
 	int		used[100];
 	t_queue	*queue;
@@ -42,11 +42,11 @@ int			bfs(t_rooms *begin, int sum)
 	ft_bzero(used, sizeof(used));
 	used[begin->id] = 1;
 	queue->room = begin;
+	begin->dist = 0;
 	while (queue && queue->room)
 	{
 		iter_room = queue->room;
 		iter_sub = iter_room->sub;
-		ft_printf("name = %s\n", iter_room->name);
 		pop_queue(&queue);
 		while (iter_sub)
 		{
@@ -54,17 +54,17 @@ int			bfs(t_rooms *begin, int sum)
 			if (!used[iter_sub->id])
 			{
 				used[iter_sub->id] = 1;
-				push_queue(&queue);
+				push_queue(&queue, iter_sub->name);
 				queue->room = walk_throught;
-				queue->id = iter_sub->id + 1;
-				queue->room->dist = iter_room->dist + 1;
-				sys_print_queue(queue);
 			}
-			// if (queue)
-			// 	ft_printf("name = %s r_d = %i i_d = %i\n", iter_sub->name, queue->room->dist,
-			// 	iter_room->dist + 1);
-			if (walk_throught && walk_throught->dist && walk_throught->dist > iter_room->dist + 1)
-				walk_throught->dist = iter_room->dist + 1;
+			// ft_printf("room %s sub name %s path = %i\n", iter_room->name, iter_sub->name, iter_sub->path);
+			// ft_printf("room dist %i + dist %i\n", walk_throught->dist, iter_room->dist + iter_sub->path);
+			if (walk_throught->dist > iter_room->dist + iter_sub->path || !walk_throught->dist)
+			{
+				if (walk_throught->dist)
+					walk_throught->prev = iter_room;
+				walk_throught->dist = iter_room->dist + iter_sub->path;
+			}
 			iter_sub = iter_sub->next;
 		}
 	}
