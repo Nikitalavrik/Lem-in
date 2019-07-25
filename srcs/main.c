@@ -15,22 +15,17 @@
 int		main(void)
 {
 	t_rooms *begin;
-	int		sum;
 	int		fd;
+	int		ants;
 	t_rooms	*end;
 
-	sum = 0;
-	fd = open("test/tst1", O_RDONLY);
+	fd = open("test/tst1000", O_RDONLY);
+	// fd = 0;
 	begin = create_room();
-	if (parsing(begin, fd))
+	if ((ants = parsing(begin, fd)))
 	{
-		dijkstra(begin, sum);
-		sys_out_rooms(begin);
 		end = go_end(begin);
-		find_way(end);
-		dijkstra(begin, sum);
-		sys_out_rooms(begin);
-		find_way(end);
+		find_way(begin, end, ants);
 	}
 	else
 		ft_printf("Error\n");

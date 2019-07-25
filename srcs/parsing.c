@@ -29,6 +29,10 @@ int		add_name(char *line, t_rooms *room, int id)
 	return (1);
 }
 
+/*
+**	Need to make validation
+*/
+
 int		parsing(t_rooms *begin, int fd)
 {
 	char	*line;
@@ -59,6 +63,8 @@ int		parsing(t_rooms *begin, int fd)
 		}
 		ft_memdel((void **)&line);
 	}
+
 	ft_printf("num of ants = %i\n", num_of_ants);
-	return (1);
+	// sys_out_rooms(begin);
+	return (num_of_ants);
 }

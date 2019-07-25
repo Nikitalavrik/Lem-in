@@ -41,6 +41,31 @@ void		pop_queue(t_queue **queue)
 	if (del)
 	{
 		(*queue) = (*queue)->next;
-		free(del);
+		ft_memdel((void **)&del);
 	}
+}
+
+t_mult_q	*create_mult()
+{
+	t_mult_q	*mult_queue;
+
+	mult_queue = ft_memalloc(sizeof(t_mult_q));
+	mult_queue->next = NULL;
+	mult_queue->queue = NULL;
+	return (mult_queue);
+}
+
+t_mult_q	*add_mult(t_mult_q *begin)
+{
+	t_mult_q	*iter_mult;
+	t_mult_q	*new_mult;
+
+	iter_mult = begin;
+	new_mult = create_mult();
+	while (iter_mult->next)
+	{
+		iter_mult = iter_mult->next;
+	}
+	iter_mult->next = new_mult;
+	return (new_mult);
 }

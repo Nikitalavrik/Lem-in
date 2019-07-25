@@ -20,20 +20,20 @@ void	sys_out_rooms(t_rooms *begin)
 	tmp = begin;
 	while (tmp)
 	{
-		ft_printf("name = |%s| id = |%i| dist = |%i|\nSub : ", tmp->name, tmp->id, tmp->dist);
+		ft_printf("name = |%s| id = |%i| dist = |%i|\n", tmp->name, tmp->id, tmp->dist);
 		tmp_sub = tmp->sub;
 		while (tmp_sub)
 		{
-			ft_printf("|%s| ", tmp_sub->name);
+			ft_printf("|%s| path = %i\n", tmp_sub->name, tmp_sub->path);
 			tmp_sub = tmp_sub->next;
 		}
-		ft_printf("\nPREV : ");
+		ft_printf("PREV : ");
 		if (tmp->prev)
 			ft_printf("{%s}", tmp->prev->name);
 		ft_printf("\n------------------\n");
 		tmp = tmp->next;
 	}
-
+	ft_printf("*********************************\n");
 }
 
 void	sys_out_dist(int *dist, int n)
@@ -56,7 +56,7 @@ void	sys_print_queue(t_queue *queue)
 
 	iter_queue = queue;
 	ft_printf("QUEUE : ");
-	while (iter_queue)
+	while (iter_queue && iter_queue->name)
 	{
 		ft_printf("%s ", iter_queue->name);
 		iter_queue = iter_queue->next;

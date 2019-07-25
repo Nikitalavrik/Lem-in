@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-t_rooms	*go_throught(t_rooms *begin, int steps)
+t_rooms		*go_throught(t_rooms *begin, int steps)
 {
 	int			i;
 	t_rooms		*iter_room;
@@ -29,18 +29,14 @@ t_rooms	*go_throught(t_rooms *begin, int steps)
 	return (iter_room);
 }
 
-int			dijkstra(t_rooms *begin, int sum)
+int			dijkstra(t_rooms *begin)
 {
-	int		used[100];
 	t_queue	*queue;
 	t_rooms	*iter_room;
 	t_rooms	*iter_sub;
 	t_rooms *walk_throught;
 
-	sum = 0;
 	queue = create_queue();
-	ft_bzero(used, sizeof(used));
-	used[begin->id] = 1;
 	queue->room = begin;
 	begin->dist = 0;
 	while (queue && queue->room)
@@ -51,22 +47,16 @@ int			dijkstra(t_rooms *begin, int sum)
 		while (iter_sub)
 		{
 			walk_throught = go_throught(begin, iter_sub->id);
-			if (!used[iter_sub->id])
-			{
-				used[iter_sub->id] = 1;
-				push_queue(&queue, iter_sub->name);
-				queue->room = walk_throught;
-			}
-			// ft_printf("room %s sub name %s path = %i\n", iter_room->name, iter_sub->name, iter_sub->path);
-			// ft_printf("room dist %i + dist %i\n", walk_throught->dist, iter_room->dist + iter_sub->path);
 			if (walk_throught->dist > iter_room->dist + iter_sub->path || !walk_throught->dist)
 			{
-				if (walk_throught->dist)
-					walk_throught->prev = iter_room;
+				push_queue(&queue, iter_sub->name);
+				queue->room = walk_throught;
+				walk_throught->prev = iter_room;
 				walk_throught->dist = iter_room->dist + iter_sub->path;
 			}
 			iter_sub = iter_sub->next;
 		}
 	}
+	begin->prev = NULL;
 	return (1);
 }
