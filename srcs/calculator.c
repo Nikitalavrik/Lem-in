@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   calculator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/18 19:47:14 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/18 19:47:14 by nlavrine         ###   ########.fr       */
+/*   Created: 2019/07/29 13:33:25 by nlavrine          #+#    #+#             */
+/*   Updated: 2019/07/29 13:33:26 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		main(void)
+int		mod(int a)
 {
-	t_rooms *begin;
-	int		fd;
-	int		ants;
-	t_rooms	*end;
+	return (a < 0 ? -a : a);
+}
 
-	fd = open("test/tst1", O_RDONLY);
-	// fd = 0;
-	begin = create_room();
-	if ((ants = parsing(begin, fd)))
+int		calculator(int *dist, int ants)
+{
+	int	i;
+	int	tmp[100];
+
+	i = 0;
+	ft_bzero(tmp, sizeof(tmp));
+	while (dist[i + 1])
 	{
-		end = go_end(begin);
-		find_way(begin, end, ants);
+		tmp[i] = 
+		i++;
 	}
-	else
-		ft_printf("Error\n");
 	return (0);
 }

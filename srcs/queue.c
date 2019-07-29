@@ -60,6 +60,8 @@ t_mult_q	*add_mult(t_mult_q *begin)
 	t_mult_q	*iter_mult;
 	t_mult_q	*new_mult;
 
+	if (!begin)
+		return (create_mult());
 	iter_mult = begin;
 	new_mult = create_mult();
 	while (iter_mult->next)
@@ -67,5 +69,6 @@ t_mult_q	*add_mult(t_mult_q *begin)
 		iter_mult = iter_mult->next;
 	}
 	iter_mult->next = new_mult;
+	new_mult->prev = iter_mult;
 	return (new_mult);
 }

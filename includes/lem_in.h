@@ -20,10 +20,18 @@
 
 int			ft_printf(const char *s, ...);
 
+// typedef	struct		s_ant
+// {
+	
+// 	struct	s_queue	*queue;
+// }
+
 typedef struct		s_mult_q
 {
+	int				id;
 	struct s_queue	*queue;
 	struct s_mult_q	*next;
+	struct s_mult_q	*prev;
 }					t_mult_q;
 
 typedef	struct		s_queue
@@ -31,6 +39,7 @@ typedef	struct		s_queue
 	int				id;
 	int				id_name;
 	char			*name;
+	int				dist;
 	struct s_rooms	*room;
 	struct s_queue	*next;
 }					t_queue;
