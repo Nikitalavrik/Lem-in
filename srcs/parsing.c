@@ -33,7 +33,7 @@ int		add_name(char *line, t_rooms *room, int id)
 **	Need to make validation
 */
 
-int		parsing(t_rooms *begin, int fd)
+int		parsing(t_rooms *begin, int fd, t_rooms **end)
 {
 	char	*line;
 	int		num_of_ants;
@@ -60,6 +60,16 @@ int		parsing(t_rooms *begin, int fd)
 				find_add_sub(begin, line);	
 			}
 			num_of_ants = num_of_ants ? num_of_ants : ft_atoi(line);
+		}
+		if (!ft_strcmp(line, "##end"))
+		{
+			ft_memdel((void **)&line);
+			get_next_line(fd, &line);
+			room = id != 0 ? add_room(&begin) : room;
+			if (!add_name(line, room, id))
+					return (0);
+			*end = room;
+			id++;
 		}
 		ft_memdel((void **)&line);
 	}

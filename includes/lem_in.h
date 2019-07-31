@@ -59,7 +59,7 @@ typedef struct		s_rooms
 t_rooms				*create_room(void);
 t_rooms				*add_room(t_rooms **begin);
 
-int					parsing(t_rooms *begin, int fd);
+int					parsing(t_rooms *begin, int fd, t_rooms **end);
 int					dijkstra(t_rooms *begin);
 int					find_way(t_rooms *begin, t_rooms *end, int ants);
 
@@ -72,10 +72,13 @@ t_rooms				*find_room(t_rooms * begin, char *room_name);
 t_rooms				*go_end(t_rooms *begin);
 t_rooms				*go_throught(t_rooms *begin, int steps);
 
+t_mult_q			*calculator(t_mult_q *mult, int ants);
 t_mult_q			*create_mult();
 t_mult_q			*add_mult(t_mult_q *begin);
 t_queue				*create_queue();
 void				push_queue(t_queue **queue, char *name);
 void				pop_queue(t_queue **queue);
+
+void				free_queue(t_queue *queue);
 
 #endif

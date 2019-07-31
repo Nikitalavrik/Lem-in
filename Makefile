@@ -16,9 +16,11 @@ SRC =	main.c			\
 		rooms.c			\
 		parsing.c		\
 		sys_output.c	\
-		bfs.c			\
+		dijkstra.c		\
 		queue.c			\
 		find_way.c		\
+		free_all.c		\
+		calculator.c	\
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror

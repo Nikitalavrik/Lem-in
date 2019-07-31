@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/18 19:47:14 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/18 19:47:14 by nlavrine         ###   ########.fr       */
+/*   Created: 2019/07/31 13:32:03 by nlavrine          #+#    #+#             */
+/*   Updated: 2019/07/31 13:32:04 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		main(void)
-{
-	t_rooms *begin;
-	int		fd;
-	int		ants;
-	t_rooms	*end;
+// void		free_room(t_rooms *room)
+// {
 
-	fd = open("test/tst1000", O_RDONLY);
-	// fd = 0;
-	end = NULL;
-	begin = create_room();
-	if ((ants = parsing(begin, fd, &end)))
+// }
+
+void		free_queue(t_queue *queue)
+{
+	while (queue)
 	{
-		// end = go_end(begin);
-		find_way(begin, end, ants);
+		if (queue->name)
+			free(queue->name);
+		pop_queue(&queue);
 	}
-	else
-		ft_printf("Error\n");
-	return (0);
 }
