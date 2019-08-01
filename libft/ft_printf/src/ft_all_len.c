@@ -14,18 +14,6 @@
 #define PLUS_INFINITE          (1.0f/0.0f)
 #define MINUS_INFINITE         (-1.0f/0.0f)
 
-size_t	ft_strlen(char *str)
-{
-	size_t len;
-
-	len = 0;
-	if (!str || !(*str))
-		return (0);
-	while (str[len])
-		len++;
-	return (len);
-}
-
 int		count_coma_pos(long double n, t_format *f)
 {
 	int count;

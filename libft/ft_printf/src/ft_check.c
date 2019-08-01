@@ -41,11 +41,11 @@ int			check_print(t_format f, va_list args, char **t, intmax_t tmp)
 		tmp = ft_floatnum(f.length == LD_TYPE ? va_arg(args, long double) :\
 	va_arg(args, double), &f, t);
 	else if (f.type == '%')
-		tmp = ft_putchar(f.type, t, &f);
+		tmp = ft_fputchar(f.type, t, &f);
 	else if (f.type == 'b')
 		tmp = check_putnbr(va_arg(args, unsigned long long), f, 2, t);
 	else
-		tmp = ft_putchar(f.type != 'c' ? f.type : va_arg(args, int), t, &f);
+		tmp = ft_fputchar(f.type != 'c' ? f.type : va_arg(args, int), t, &f);
 	return (tmp);
 }
 

@@ -19,6 +19,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <limits.h>
+# include "../../libft.h"
 
 # define WITHOUT_TYPE 	0
 # define H_TYPE			1
@@ -97,7 +98,7 @@ char				*apost(char *ret, int *ilen, t_format f);
 */
 
 int					ft_printsharp(char type, t_ull n, t_format f, char **ret);
-int					ft_putchar(wchar_t c, char **ret, t_format *form);
+int					ft_fputchar(wchar_t c, char **ret, t_format *form);
 int					ft_fputstr(char *str, t_format form, char **ret);
 int					ft_putunicode(wchar_t *str, t_format form, char **ret);
 int					print_pointer(void *adr, t_format form, char **ret);
@@ -130,15 +131,6 @@ t_ull				ft_cast_type(long long n, char type);
 ** libft func
 */
 
-int					ft_isdigit(int c);
-int					ft_atoi(const char *str);
-char				*ft_realloc(char *ptr, size_t prev_size, size_t new_size);
-char				*ft_strncat(char *s1, char *s2, size_t n);
-void				*ft_memmove(void *dst, const void *src, size_t n);
-void				*ft_memcpy(void *dst, const void *src, size_t n);
-void				ft_memdel(void **ap);
-void				*ft_memalloc(size_t size);
-void				ft_bzero(void *s, size_t n);
-size_t				ft_strlen(char *str);
+char				*ft_strmcat(char *s1, char *s2, size_t n);
 
 #endif

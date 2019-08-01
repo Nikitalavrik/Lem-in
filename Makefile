@@ -28,7 +28,7 @@ SRC_DIR = srcs
 H_DIR = includes
 OBJ_DIR = obj
 LIB = libft/libft.a
-PRINTF = ft_printf/libftprintf.a
+PRINTF = libft/ft_printf/libftprintf.a
 
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
 
@@ -36,7 +36,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
 all: $(NAME) 
 
-$(NAME): $(PRINTF) $(LIB) $(OBJS)
+$(NAME): $(LIB) $(PRINTF) $(OBJS)
 		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g
 	
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -47,19 +47,19 @@ $(LIB):
 	@make -C ./libft/
 
 $(PRINTF):
-	@make -C ./ft_printf/
+	@make -C ./libft/ft_printf/
 
 clean:
 	@rm -f $(OBJS)
 	@rm -rf $(OBJ_DIR)
 	@make -C ./libft/ clean
-	@make -C ./ft_printf/ clean
+	@make -C ./libft/ft_printf/ clean
 
 fclean: clean
 	@rm $(NAME)
 	@make -C ./libft/ fclean
-	@make -C ./ft_printf/ fclean
+	@make -C ./libft/ft_printf/ fclean
 
 re: fclean all
 	@make -C ./libft/ re
-	@make -C ./ft_printf/ re
+	@make -C ./libft/ft_printf/ re

@@ -18,17 +18,25 @@ int		main(void)
 	int		fd;
 	int		ants;
 	t_rooms	*end;
+	t_rooms	*begin_room;
 
-	fd = open("test/tst1000", O_RDONLY);
+	fd = open("test/tst1", O_RDONLY);
+
 	// fd = 0;
 	end = NULL;
+	begin_room = NULL;
 	begin = create_room();
-	if ((ants = parsing(begin, fd, &end)))
+	ants = parsing(begin, fd, &end, &begin_room);
+	if (ants > 0 && begin_room && end)
 	{
-		// end = go_end(begin);
-		find_way(begin, end, ants);
-	}
+		find_way(begin, end, begin_room, ants);
+		system("leaks lem-in");
+		exit(0);		
+	}	
 	else
 		ft_printf("Error\n");
+	free_room(begin);
+	// system("leaks lem-in");
+	// exit(0);
 	return (0);
 }

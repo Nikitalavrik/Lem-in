@@ -41,7 +41,6 @@ t_queue			*find_way_one(t_rooms *end, int ant)
 	while (iter_prev->prev)
 	{
 		push_queue(&queue, iter_prev->name);
-		// queue->dist = end->dist;
 		queue->id = ant;
 		queue->id_name = iter_prev->id;
 		queue->room = iter_prev->prev;
@@ -57,43 +56,15 @@ t_queue			*find_way_one(t_rooms *end, int ant)
 	return (queue);
 }
 
-/*
-** change direct to normal 
-*/
-
-void		refill_rooms(t_queue *queue, t_rooms *begin)
-{
-	t_queue	*iter_queue;
-	t_rooms	*iter_room;
-	t_rooms	*sub;
-
-	iter_queue = queue;
-	iter_room = begin;
-	while (iter_queue && iter_queue->room)
-	{
-		sub = NULL;
-		iter_room = iter_queue->room;
-		// iter_room->dist
-		if (iter_room)
-			sub = find_room(iter_room->sub, iter_queue->name);
-		if (sub)
-		{
-			sub->path = UINT16_MAX;
-			// sub->dist += 1;
-		}
-		iter_queue = iter_queue->next;
-	}
-}
-
 int			is_equal_queue(t_queue *q1, t_queue *q2)
 {
 	t_queue *i1;
 	t_queue	*i2;
 
+	if (!q1 || !q2)
+		return (1);
 	i1 = q1;
 	i2 = q2;
-	if (!i1 || !i2)
-		return (1);
 	while (i1 && i2)
 	{
 		if (i1->id_name != i2->id_name)
@@ -101,78 +72,15 @@ int			is_equal_queue(t_queue *q1, t_queue *q2)
 		i1 = i1->next;
 		i2 = i2->next;
 	}
-	// q1->next = NULL;
-	// free_queue(q2);
-	return (0);
+	return (i1 || i2 ? 1 : 0);
 }
-
-int			calc_prev_dist(int dist, int *paths, int id)
-{
-	int		res_dist;
-	int		sum;
-
-	res_dist = dist;
-	paths[id] = dist;
-	sum = 0;
-	// ft_printf("id %i\n", id);
-	while (id)
-	{
-		sum += res_dist - paths[--id];
-	}
-	// ft_printf("dist = %i\n", sum);
-	return (sum);
-}
-
-// t_mult_q		*init_ants(t_mult_q *mult, int num_ants)
-// {
-// 	t_mult_q	*ants;
-// 	t_mult_q	*iter_q;
-// 	t_mult_q	*iter_a;
-// 	int			paths[100];
-// 	int			dist_sum;
-
-// 	ants = NULL;
-// 	iter_q = mult;
-// 	ft_bzero(paths, sizeof(paths));
-// 	while (num_ants)
-// 	{
-// 		iter_q = mult;
-// 		while (iter_q && num_ants)
-// 		{	
-// 			dist_sum = calc_prev_dist(iter_q->queue->dist, paths, iter_q->queue->id);
-// 			if (num_ants > dist_sum)
-// 			{
-// 				// ft_printf("num_ants %i dist_sum %i\n", num_ants, dist_sum);
-// 				if (!ants)
-// 				{
-// 					ants = create_mult();
-// 					iter_a = ants;
-// 				}
-// 				else
-// 					iter_a = add_mult(iter_a);
-// 				// ft_printf("ant %i queue id %i\n", num_ants, iter_q->queue->id);
-// 				iter_a->id = num_ants;
-// 				iter_a->queue = copy_queue(iter_q->queue);
-// 				// sys_print_queue(iter_a->queue);
-// 				num_ants--;
-// 			}		
-// 			iter_q = iter_q->next;
-// 		}
-// 	}
-// 	return (ants);
-// }
 
 void		print_res(t_mult_q *queue, int end_id)
 {
 	t_mult_q	*iter;
 	int			used[UINT16_MAX];
 	t_mult_q	*iter_q;
-	t_mult_q	*end;
 
-	end = queue;
-	// while (end->next)
-	// 	end = end->next;
-	// iter = end;
 	iter = queue;
 	while (iter)
 	{
@@ -184,13 +92,14 @@ void		print_res(t_mult_q *queue, int end_id)
 			{
 				ft_printf("L%i-%s ", iter_q->id + 1, iter_q->queue->name);
 				used[iter_q->queue->id_name] = 1;
+				ft_memdel((void **)&iter_q->queue->name);
 				pop_queue(&iter_q->queue);
 			}
 			iter_q = iter_q->next;
 		}
 		if (!iter->queue)
 			iter = iter->next;
-		if (iter && iter->queue)
+		if (iter && (iter->queue || (iter->next && iter->next->queue)))
 			ft_printf("\n");
 	}
 	ft_printf("\n");
@@ -200,7 +109,7 @@ void		print_res(t_mult_q *queue, int end_id)
 **	Problem with many ants
 */
 
-int			find_way(t_rooms *begin, t_rooms *end, int ants)
+int			find_way(t_rooms *begin, t_rooms *end, t_rooms *begin_room, int ants)
 {
 	int			i;
 	t_mult_q	*mult_queue;
@@ -217,29 +126,18 @@ int			find_way(t_rooms *begin, t_rooms *end, int ants)
 		prev_queue = iter_mult->queue;
 		if (i)
 			iter_mult = add_mult(iter_mult);
-		dijkstra(begin);
+		dijkstra(begin, begin_room);
 		iter_mult->queue = find_way_one(end, i);
-		// refill_rooms(iter_mult->queue, begin);
 		fill_rooms(begin);
 		i++;
 	}
-	// iter_mult = mult_queue;
-	// while (iter_mult)
-	// {
-	// 	ft_printf("dist = %i\n", iter_mult->queue->dist);
-	// 	sys_print_queue(iter_mult->queue);
-	// 	iter_mult = iter_mult->next;
-	// }
-	// ants_queue = init_ants(mult_queue, ants);
+	ants_queue = iter_mult->prev;
+	ants_queue->next = NULL;
+	ft_memdel((void **)iter_mult);
+	// sys_out_mult(mult_queue);
 	ants_queue = calculator(mult_queue, ants);
 	print_res(ants_queue, end->id);
-	// sys_print_queue(ants_queue);
-	// while (ants_queue)
-	// {
-	// 	ft_printf("id %i\n", ants_queue->id);
-	// 	sys_print_queue(ants_queue->queue);
-	// 	ants_queue = ants_queue->next;
-	// }
-	// print_way(mult_queue);
+	free_mult(ants_queue);
+	free_mult(mult_queue);
 	return (1);
 }	

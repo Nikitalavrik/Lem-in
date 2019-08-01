@@ -31,11 +31,6 @@ int			count_sharp(unsigned long long n, int type, t_format form,\
 	return (0);
 }
 
-int			ft_isdigit(int c)
-{
-	return (c >= 48 && c <= 58);
-}
-
 t_ull		ft_inverse(t_ull n, char type, int neg)
 {
 	t_ull tmp;
@@ -58,22 +53,6 @@ t_ull		ft_inverse(t_ull n, char type, int neg)
 	else
 		tmp = n;
 	return (tmp);
-}
-
-int			ft_atoi(const char *str)
-{
-	int				sign;
-	long long		result;
-
-	result = 0;
-	while (*str == ' ' || *str == '\n' || *str == '\f' || *str == '\t'\
-	|| *str == '\r' || *str == '\v')
-		str++;
-	sign = (*str == '-') ? -1 : 1;
-	str += (*str == '+' || *str == '-') ? 1 : 0;
-	while (*str && *str >= '0' && *str <= '9')
-		result = result * 10 + (*str++ - '0');
-	return (sign * result);
 }
 
 int			check_inf(long double num, t_format form, char **ret)

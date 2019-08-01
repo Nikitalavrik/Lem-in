@@ -12,7 +12,7 @@
 
 #include "../include/ft_printf.h"
 
-int		ft_putchar(wchar_t c, char **ret, t_format *form)
+int		ft_fputchar(wchar_t c, char **ret, t_format *form)
 {
 	int	len;
 	int bits;

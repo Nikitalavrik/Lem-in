@@ -12,17 +12,43 @@
 
 #include "lem_in.h"
 
-// void		free_room(t_rooms *room)
-// {
+void		free_room(t_rooms *begin)
+{
+	t_rooms *next;
+	t_rooms *next_sub;
 
-// }
+	while (begin)
+	{
+		next = begin->next;
+		while (begin->sub)
+		{
+			next_sub = begin->sub->next;
+			ft_memdel((void **)&begin->sub);
+			begin->sub = next_sub;
+		}
+		ft_memdel((void **)&begin->name);
+		ft_memdel((void **)&begin);
+		begin = next;
+	}
+}
+
+void		free_mult(t_mult_q *mult)
+{
+	t_mult_q *next;
+
+	while (mult)
+	{
+		next = mult->next;
+		free_queue(mult->queue);
+		ft_memdel((void **)&mult);
+		mult = next;
+	}
+}
 
 void		free_queue(t_queue *queue)
 {
 	while (queue)
 	{
-		if (queue->name)
-			free(queue->name);
 		pop_queue(&queue);
 	}
 }

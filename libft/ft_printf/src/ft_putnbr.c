@@ -30,13 +30,13 @@ t_ull	ft_cast_type(long long n, char type)
 	return (num);
 }
 
-int		ft_putnbr(long double num, t_format *form,\
+int		ft_fputnbr(long double num, t_format *form,\
 									unsigned int base, char **ret)
 {
 	if (!form->precision && !num && form->type == 'i')
 		return (0);
 	if (num >= base)
-		ft_putnbr(num / base, form, base, ret);
+		ft_fputnbr(num / base, form, base, ret);
 	num = (t_ull)num % base;
 	num += (num < 10) ? '0' : form->type - 33;
 	*(*ret)++ = num;
@@ -111,7 +111,7 @@ int		check_putnbr(long double n, t_format f, int base, char **ret)
 								!check_flags(f, '-'))) && !check_flags(f, 'f'))
 		ilen += ft_fill(ret, f, ilen);
 	ilen += check_flags(f, 'f') ?\
-	check_double(n, ret, f) : ft_putnbr(num, &f, base, ret);
+	check_double(n, ret, f) : ft_fputnbr(num, &f, base, ret);
 	*ret -= ilen;
 	*ret = check_flags(f, '\'') && f.count_stars ? apost(*ret, &ilen, f) : *ret;
 	return (ilen);

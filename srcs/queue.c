@@ -41,8 +41,6 @@ void		pop_queue(t_queue **queue)
 	if (del)
 	{
 		(*queue) = (*queue)->next;
-		// if (del->name)
-		// 	ft_memdel((void **)&del->name);
 		ft_memdel((void **)&del);
 	}
 }

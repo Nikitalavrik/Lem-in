@@ -81,7 +81,7 @@ SRCS = ft_memset.c	\
 		  ft_printhex.c		\
 		  ft_realloc.c		\
 		  ft_strlenc.c		\
-		  get_next_line.c	\
+		  get_next_line.c		\
 
 OBJ = $(SRCS:%.c=%.o)
 

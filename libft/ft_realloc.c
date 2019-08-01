@@ -14,15 +14,15 @@
 
 void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
 {
-	char	*ret;
+	void	*new;
 
-	if (!ptr)
-		return (NULL);
+	new = NULL;
 	if (prev_size < new_size)
 	{
-		ret = ft_memcpy(ft_memalloc(new_size), ptr, prev_size);
-		ft_memdel(&ptr);
-		return (ret);
+		new = ft_memalloc(new_size);
+		new = ft_memmove(new, ptr, prev_size);
+		ft_memdel((void **)(&ptr));
+		return (new);
 	}
 	return (ptr);
 }

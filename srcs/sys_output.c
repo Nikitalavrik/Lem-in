@@ -50,16 +50,29 @@ void	sys_out_dist(int *dist, int n)
 	ft_printf("\n");
 }
 
-void	sys_print_queue(t_queue *queue)
+void	sys_out_queue(t_queue *queue)
 {
 	t_queue *iter_queue;
 
 	iter_queue = queue;
-	ft_printf("QUEUE : ");
+	ft_printf("dist %i\nQUEUE : ", iter_queue->dist);
 	while (iter_queue && iter_queue->name)
 	{
 		ft_printf("%s ", iter_queue->name);
 		iter_queue = iter_queue->next;
 	}
 	ft_printf("\n");
+}
+
+void	sys_out_mult(t_mult_q *mult)
+{
+	t_mult_q	*iter;
+
+	iter = mult;
+	while (iter)
+	{
+		sys_out_queue(iter->queue);
+		iter = iter->next;
+	}
+	ft_printf("~~~~~~~~~~~~~~~~~\n");
 }

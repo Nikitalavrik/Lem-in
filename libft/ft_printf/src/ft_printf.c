@@ -42,7 +42,7 @@ void		put_param(t_format *form, int *print_len, char **ret, va_list args)
 		return ;
 	*ret = ft_realloc(*ret, f_len, *print_len + (*str ? 1 : 0));
 	*ret += f_len;
-	*ret = ft_strncat(*ret, str, *print_len - f_len);
+	*ret = ft_strmcat(*ret, str, *print_len - f_len);
 	*ret -= f_len;
 	if (str && *str)
 		ft_memdel((void **)(&str));

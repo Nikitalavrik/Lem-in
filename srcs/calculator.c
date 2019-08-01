@@ -132,7 +132,6 @@ int		free_end(t_mult_q *mult, int len)
 t_mult_q	*calculator(t_mult_q *mult, int ants)
 {
 	int			i;
-	int			j;
 	int			tmp[100];
 	t_mult_q	*iter;
 	int			tmp_ants;
@@ -148,42 +147,20 @@ t_mult_q	*calculator(t_mult_q *mult, int ants)
 		if (iter->next)
 		{
 			tmp[i] = iter->next->queue->dist - iter->queue->dist;
-			// ft_printf("dist = %i\n", iter->queue->dist);
 			ants -= (i + 1) * tmp[i];
 			iter = iter->next;
-			// ft_printf("i = %i, tmp = %i\n", i, tmp[i]);
 			i++;
 		}
 		else
 		{
-			// ft_printf("ants = %i\n", ants);
+			tmp[i] = mod((iter->queue->dist / (i + 1)) - ants);
+			i++;
 			break ;
 		}
-		
 	}
-	j = 0;
-	// ft_printf("TMP : ");
-	// while (j < i)
-	// {
-	// 	ft_printf("%i ", tmp[j]);
-	// 	j++;
-	// }
-	// ft_printf("\n");
 	count_paths = counting_ants_path(tmp, tmp_ants, i);
 	free_end(mult, i);
-	// ft_printf("i %i\n", i);
-	// while (mult)
-	// {
-	// 	sys_print_queue(mult->queue);
-	// 	mult = mult->next;
-	// }
 	ants_queue = create_ants(mult, count_paths, tmp_ants);
-	iter = ants_queue;
-	// while (iter)
-	// {
-	// 	ft_printf("ant id %i, queue id %i\n", iter->id, iter->queue->id);
-	// 	sys_print_queue(iter->queue);
-	// 	iter = iter->next;
-	// }
+	ft_memdel((void **)&count_paths);
 	return (ants_queue);
 }

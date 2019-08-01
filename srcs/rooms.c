@@ -44,7 +44,7 @@ t_rooms		*add_room(t_rooms **begin)
 	return (new_room);
 }
 
-t_rooms		*find_room(t_rooms * begin, char *room_name)
+t_rooms		*find_room(t_rooms *begin, char *room_name)
 {
 	t_rooms *tmp;
 
@@ -58,7 +58,7 @@ t_rooms		*find_room(t_rooms * begin, char *room_name)
 	return (NULL);
 }
 
-void		find_add_sub(t_rooms *begin, char *line)
+int			find_add_sub(t_rooms *begin, char *line)
 {
 	int		pos_slesh;
 	char	*room_name;
@@ -72,7 +72,7 @@ void		find_add_sub(t_rooms *begin, char *line)
 	room_name = ft_strncpy(room_name, line, pos_slesh - 1);
 	room = find_room(begin, room_name);
 	if (!room)
-		return ;
+		return (0);
 	sub_room = add_room(&room->sub);
 	ft_memdel((void **)&room_name); 
 	len_n = ft_strlen(line);
@@ -80,12 +80,18 @@ void		find_add_sub(t_rooms *begin, char *line)
 	room_name = ft_strncpy(room_name, line + pos_slesh, len_n - pos_slesh);
 	room_sub_room = find_room(begin, room_name);
 	if (!room_sub_room)
-		return ;
+		return (0);
 	sub_room->id = room_sub_room->id;
 	sub_room->name = room_sub_room->name;
+	sub_room->x = room_sub_room->x;
+	sub_room->y = room_sub_room->y;
+	if (!check_name_x_y(room->sub, sub_room))
+		return (0);
 	sub_room = add_room(&room_sub_room->sub);
 	sub_room->id = room->id;
 	sub_room->name = room->name;
+	ft_memdel((void **)&room_name);
+	return (1);
 }
 
 t_rooms		*go_end(t_rooms *begin)

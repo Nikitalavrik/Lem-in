@@ -28,22 +28,26 @@ SRC = 	ft_printf.c			\
 		ft_check.c			\
 		ft_init.c			\
 		ft_parse.c			\
-		ft_mem.c			\
 		ft_unicode.c
 
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
 
 OBJS = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
+LIBFT = ../libft.a
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
-		@ar rc $@ $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
+		@ar rc $@ $(OBJS) $(LIBFT)
 		@ranlib $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		@mkdir -p $(OBJ_DIR)
-		@$(CC) $(FLAGS) -I $(H_DIR) -o $@ -c $<
+		@$(CC) $(FLAGS) -I $(H_DIR) -o $@ -c $< 
+
+$(LIBFT):
+	@make -C ../
 
 clean:
 	@rm -f $(OBJS)

@@ -29,7 +29,7 @@ t_rooms		*go_throught(t_rooms *begin, int steps)
 	return (iter_room);
 }
 
-int			dijkstra(t_rooms *begin)
+int			dijkstra(t_rooms *begin, t_rooms *begin_room)
 {
 	t_queue	*queue;
 	t_rooms	*iter_room;
@@ -37,8 +37,8 @@ int			dijkstra(t_rooms *begin)
 	t_rooms *walk_throught;
 
 	queue = create_queue();
-	queue->room = begin;
-	begin->dist = 0;
+	queue->room = begin_room;
+	begin_room->dist = 0;
 	while (queue && queue->room)
 	{
 		iter_room = queue->room;
@@ -57,6 +57,6 @@ int			dijkstra(t_rooms *begin)
 			iter_sub = iter_sub->next;
 		}
 	}
-	begin->prev = NULL;
+	begin_room->prev = NULL;
 	return (1);
 }
