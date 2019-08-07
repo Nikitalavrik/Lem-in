@@ -33,7 +33,7 @@ typedef	struct		s_queue
 	int				id;
 	int				id_name;
 	char			*name;
-	int				dist;
+	long			dist;
 	struct s_rooms	*room;
 	struct s_queue	*next;
 }					t_queue;
@@ -43,8 +43,8 @@ typedef struct		s_rooms
 {
 	char			*name;
 	int				id;
-	int				dist;
-	int				path;
+	long			dist;
+	long			path;
 	int				x;
 	int				y;
 	struct s_rooms	*sub;
@@ -69,15 +69,15 @@ t_rooms				*find_room(t_rooms * begin, char *room_name);
 t_rooms				*go_end(t_rooms *begin);
 t_rooms				*go_throught(t_rooms *begin, int steps);
 
-t_mult_q			*calculator(t_mult_q *mult, int ants);
+t_mult_q			*calculator(t_mult_q *mult, int ants, int *lines);
 t_mult_q			*create_mult();
 t_mult_q			*add_mult(t_mult_q *begin);
 t_queue				*create_queue();
 void				push_queue(t_queue **queue, char *name);
 void				pop_queue(t_queue **queue);
 
-void				free_queue(t_queue *queue);
+void				free_queue(t_queue **queue);
 void				free_room(t_rooms *begin);
-void				free_mult(t_mult_q *mult);
+void				free_mult(t_mult_q **mult);
 
 #endif

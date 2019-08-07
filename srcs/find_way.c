@@ -48,12 +48,38 @@ t_queue			*find_way_one(t_rooms *end, int ant)
 		if (iter_prev && iter_prev->sub)
 		{
 			sub = find_room(iter_prev->sub, queue->name);
-			sub->path = UINT16_MAX;
+			sub->path = UINT32_MAX;
 		}
 		dist++;
 	}
 	queue->dist = dist;
 	return (queue);
+}
+
+int			check_queue_ident(t_queue *q1, t_queue *q2)
+{
+	t_queue	*i1;
+	t_queue *i2;
+
+	i1 = q1;
+	i2 = q2;
+	if (!q1 || !q2)
+		return (1);
+	while (i1->next)
+	{
+		i2 = q2;
+		while (i2->next)
+		{
+			if (i1->id_name == i2->id_name)
+			{
+				ft_printf("NAME = %s\n", i1->name);
+				return (1);
+			}
+			i2 = i2->next;
+		}
+		i1 = i1->next;
+	}
+	return (0);
 }
 
 int			is_equal_queue(t_queue *q1, t_queue *q2)
@@ -75,13 +101,14 @@ int			is_equal_queue(t_queue *q1, t_queue *q2)
 	return (i1 || i2 ? 1 : 0);
 }
 
-void		print_res(t_mult_q *queue, int end_id)
+void		print_res(t_mult_q *queue, int end_id, int i)
 {
 	t_mult_q	*iter;
 	int			used[UINT16_MAX];
 	t_mult_q	*iter_q;
 
 	iter = queue;
+	// ft_printf("lines = %i\n", i);
 	while (iter)
 	{
 		iter_q = iter;
@@ -90,7 +117,12 @@ void		print_res(t_mult_q *queue, int end_id)
 		{
 			if (iter_q->queue && (!used[iter_q->queue->id_name] || iter_q->queue->id_name == end_id))
 			{
-				ft_printf("L%i-%s ", iter_q->id + 1, iter_q->queue->name);
+				// ft_printf("L%i-%s ", iter_q->id + 1, iter_q->queue->name);
+				write(1, "L", 1);
+				ft_putnbr(iter_q->id + 1);
+				write(1, "-", 1);
+				ft_putstr(iter_q->queue->name);
+				write(1, " ", 1);
 				used[iter_q->queue->id_name] = 1;
 				ft_memdel((void **)&iter_q->queue->name);
 				pop_queue(&iter_q->queue);
@@ -99,10 +131,10 @@ void		print_res(t_mult_q *queue, int end_id)
 		}
 		if (!iter->queue)
 			iter = iter->next;
-		if (iter && (iter->queue || (iter->next && iter->next->queue)))
-			ft_printf("\n");
+		if (i > 0)
+			write(1, "\n", 1);
+		i--;
 	}
-	ft_printf("\n");
 }
 
 /*
@@ -116,6 +148,8 @@ int			find_way(t_rooms *begin, t_rooms *end, t_rooms *begin_room, int ants)
 	t_mult_q	*iter_mult;		
 	t_queue		*prev_queue;
 	t_mult_q	*ants_queue;
+	// t_queue		*tmp_queue;
+	// int			*used[UINT16_MAX];
 
 	i = 0;
 	mult_queue = create_mult();
@@ -128,16 +162,25 @@ int			find_way(t_rooms *begin, t_rooms *end, t_rooms *begin_room, int ants)
 			iter_mult = add_mult(iter_mult);
 		dijkstra(begin, begin_room);
 		iter_mult->queue = find_way_one(end, i);
+		// check_queue_ident(prev_queue, iter_mult->queue);
 		fill_rooms(begin);
 		i++;
+		// ft_printf("find\n");
 	}
 	ants_queue = iter_mult->prev;
 	ants_queue->next = NULL;
-	ft_memdel((void **)iter_mult);
-	// sys_out_mult(mult_queue);
-	ants_queue = calculator(mult_queue, ants);
-	print_res(ants_queue, end->id);
-	free_mult(ants_queue);
-	free_mult(mult_queue);
+	free_mult(&iter_mult);
+	sys_out_mult(mult_queue);
+	ants_queue = calculator(mult_queue, ants, &i);
+	// system("leaks lem-in");
+	// exit(0);
+	ft_printf("lines = %i\n", i);
+	print_res(ants_queue, end->id, i);
+	free_mult(&ants_queue);
+	free_mult(&mult_queue);
+	// ft_memdel((void **)&iter_mult);
+	// ft_memdel((void **)&mult_queue);
+	// system("leaks lem-in");
+	// exit(0);
 	return (1);
 }	

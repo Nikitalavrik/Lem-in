@@ -32,23 +32,25 @@ void		free_room(t_rooms *begin)
 	}
 }
 
-void		free_mult(t_mult_q *mult)
+void		free_mult(t_mult_q **mult)
 {
-	t_mult_q *next;
+	t_mult_q	*next;
 
-	while (mult)
+	while (*mult)
 	{
-		next = mult->next;
-		free_queue(mult->queue);
-		ft_memdel((void **)&mult);
-		mult = next;
+		next = (*mult)->next;
+		free_queue(&(*mult)->queue);
+		(*mult)->next = NULL;
+		(*mult)->prev = NULL;
+		ft_memdel((void **)mult);
+		(*mult) = next;
 	}
 }
 
-void		free_queue(t_queue *queue)
+void		free_queue(t_queue **queue)
 {
-	while (queue)
+	while (*queue)
 	{
-		pop_queue(&queue);
+		pop_queue(queue);
 	}
 }

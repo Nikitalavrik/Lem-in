@@ -93,43 +93,48 @@ int		*counting_ants_path(int *tmp, int ants, int len)
 		ants -= count_path[i];
 		i++;
 	}
-	// i = 0;
-	// ft_printf("PATHS : ");
-	// while (i < len)
-	// {
-	// 	ft_printf("%i ", count_path[i]);
-	// 	i++;
-	// }
-	// ft_printf("\n");
+	i = 0;
+	ft_printf("PATHS : ");
+	while (i < len)
+	{
+		ft_printf("%i ", count_path[i]);
+		i++;
+	}
+	ft_printf("\n");
 	return (count_path);
 }
 
-int		free_end(t_mult_q *mult, int len)
+int		free_end(t_mult_q **mult, int len)
 {
 	int			i;
 	t_mult_q	*iter;
 	t_mult_q	*iter_next;
 
 	i = 0;
-	iter = mult;
+	iter = *mult;
 	while (i < len - 1)
 	{
 		iter = iter->next;
 		i++;
 	}
+	// free_mult(&iter, 0);
 	iter_next = iter->next;
 	iter->next = NULL;
-	iter = iter_next;
-	while (iter)
-	{
-		iter_next = iter->next;
-		ft_memdel((void **)&iter);
-		iter = iter_next;
-	}
+	free_mult(&iter_next);
+	// iter = iter_next;
+	// while (iter)
+	// {
+	// 	iter_next = iter->next;
+	// 	free_queue(&iter->queue);
+	// 	ft_memdel((void **)&iter);
+	// 	iter = iter_next;
+	// }
+	// system("leaks lem-in");
+	// exit(0);
 	return (1);
 }
 
-t_mult_q	*calculator(t_mult_q *mult, int ants)
+t_mult_q	*calculator(t_mult_q *mult, int ants, int *lines)
 {
 	int			i;
 	int			tmp[100];
@@ -142,24 +147,39 @@ t_mult_q	*calculator(t_mult_q *mult, int ants)
 	iter = mult;
 	tmp_ants = ants;
 	ft_bzero(tmp, sizeof(tmp));
+	*lines = 0;
 	while (ants > 0)
 	{
 		if (iter->next)
 		{
 			tmp[i] = iter->next->queue->dist - iter->queue->dist;
-			ants -= (i + 1) * tmp[i];
+			if (((i + 1) * tmp[i]) > ants)
+			{
+				
+				tmp[i] = (ants / (i + 1)) + (ants % (i + 1) ? 1 : 0);
+				// ft_printf("ants = %i f = %i tmp[%i] = %i\n", ants, ants / (i + 1), i, tmp[i]);
+				*lines =  tmp[i] + iter->queue->dist - 1;
+				ants = 0;
+			}
+			else
+				ants -= (i + 1) * tmp[i];
 			iter = iter->next;
 			i++;
 		}
 		else
 		{
-			tmp[i] = mod((iter->queue->dist / (i + 1)) - ants);
+			tmp[i] = (ants / (i + 1)) + (ants % (i + 1) ? 1 : 0);
+			*lines = tmp[i] + iter->queue->dist - 1;
 			i++;
+			// ft_printf("111111\n");
 			break ;
 		}
 	}
+	sys_out_dist(tmp, i);
+	// ft_printf("lines = %i\n", lines);
 	count_paths = counting_ants_path(tmp, tmp_ants, i);
-	free_end(mult, i);
+	free_end(&mult, i);
+
 	ants_queue = create_ants(mult, count_paths, tmp_ants);
 	ft_memdel((void **)&count_paths);
 	return (ants_queue);

@@ -30,8 +30,8 @@ int		main(void)
 	if (ants > 0 && begin_room && end)
 	{
 		find_way(begin, end, begin_room, ants);
-		system("leaks lem-in");
-		exit(0);		
+		// system("leaks lem-in");
+		// exit(0);		
 	}	
 	else
 		ft_printf("Error\n");
