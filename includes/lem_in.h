@@ -23,6 +23,8 @@ int			ft_printf(const char *s, ...);
 typedef struct		s_mult_q
 {
 	int				id;
+	int				lines;
+	int				ants;
 	struct s_queue	*queue;
 	struct s_mult_q	*next;
 	struct s_mult_q	*prev;
@@ -49,12 +51,14 @@ typedef struct		s_rooms
 	int				y;
 	struct s_rooms	*sub;
 	struct s_rooms	*prev;
+	struct s_rooms	*prev_answer;
 	struct s_rooms	*next;
 }					t_rooms;
 
 int					parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **b);
-int					dijkstra(t_rooms *begin, t_rooms *begin_room);
+int					dijkstra(t_rooms *begin_room);
 int					find_way(t_rooms *begin, t_rooms *end, t_rooms *b, int ants);
+int					relevance(int *tmp, int i, int *ants, t_mult_q *mult);
 int					check_name_x_y(t_rooms *begin, t_rooms *room);
 
 void				sys_out_dist(int *dist, int n);
@@ -69,7 +73,7 @@ t_rooms				*find_room(t_rooms * begin, char *room_name);
 t_rooms				*go_end(t_rooms *begin);
 t_rooms				*go_throught(t_rooms *begin, int steps);
 
-t_mult_q			*calculator(t_mult_q *mult, int ants, int *lines);
+t_mult_q			*calculator(t_mult_q *mult, int ants, int *tmp, int len);
 t_mult_q			*create_mult();
 t_mult_q			*add_mult(t_mult_q *begin);
 t_queue				*create_queue();
@@ -77,7 +81,8 @@ void				push_queue(t_queue **queue, char *name);
 void				pop_queue(t_queue **queue);
 
 void				free_queue(t_queue **queue);
-void				free_room(t_rooms *begin);
+void				free_rooms(t_rooms *begin);
 void				free_mult(t_mult_q **mult);
+void				free_sub(t_rooms *sub);
 
 #endif

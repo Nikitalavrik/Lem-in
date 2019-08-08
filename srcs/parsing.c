@@ -55,6 +55,12 @@ int		add_name(t_rooms *begin, char *line, t_rooms *room, int id)
 **	Need to make validation
 */
 
+// void	add_to_room(t_rooms *room, t_rooms *begin, char line, int id)
+// {
+
+// }
+
+
 int		parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **begin_room)
 {
 	char	*line;
@@ -70,20 +76,17 @@ int		parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **begin_room)
 	{
 		if (ft_strncmp(line, "#", 1))
 		{
-			
 			if (!ft_get_index(line, '-') && num_of_ants)
 			{
 				room = id != 0 ? add_room(&begin) : room;
-
 				if (!add_name(begin, line, room, id))
 					return (0);
 				id++;
-
 			}
 			else if (num_of_ants)
 			{
 				if (!find_add_sub(begin, line))
-					return (0);	
+					return (0);
 			}
 			num_of_ants = num_of_ants ? num_of_ants : ft_atoi(line);
 		}
@@ -93,7 +96,7 @@ int		parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **begin_room)
 			get_next_line(fd, &line);
 			room = id != 0 ? add_room(&begin) : room;
 			if (!add_name(begin, line, room, id))
-					return (0);
+				return (0);
 			*end = room;
 			id++;
 		}
@@ -103,7 +106,7 @@ int		parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **begin_room)
 			get_next_line(fd, &line);
 			room = id != 0 ? add_room(&begin) : room;
 			if (!add_name(begin, line, room, id))
-					return (0);
+				return (0);
 			*begin_room = room;
 			id++;
 		}

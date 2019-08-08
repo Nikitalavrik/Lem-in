@@ -41,6 +41,7 @@ t_rooms		*add_room(t_rooms **begin)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_room;
+	new_room->prev = tmp;
 	return (new_room);
 }
 
@@ -66,6 +67,7 @@ int			find_add_sub(t_rooms *begin, char *line)
 	t_rooms	*room;
 	t_rooms	*room_sub_room;
 	int		len_n;
+	char	*tmp;
 
 	pos_slesh = ft_get_index(line, '-');
 	room_name = ft_memalloc(sizeof(char) * pos_slesh);
@@ -74,7 +76,8 @@ int			find_add_sub(t_rooms *begin, char *line)
 	if (!room)
 		return (0);
 	sub_room = add_room(&room->sub);
-	ft_memdel((void **)&room_name); 
+	tmp = room_name;
+	// ft_memdel((void **)&room_name);
 	len_n = ft_strlen(line);
 	room_name = ft_memalloc(sizeof(char) * (len_n - pos_slesh + 1));
 	room_name = ft_strncpy(room_name, line + pos_slesh, len_n - pos_slesh);
@@ -82,15 +85,17 @@ int			find_add_sub(t_rooms *begin, char *line)
 	if (!room_sub_room)
 		return (0);
 	sub_room->id = room_sub_room->id;
-	sub_room->name = room_sub_room->name;
+	sub_room->name = room_name;
 	sub_room->x = room_sub_room->x;
 	sub_room->y = room_sub_room->y;
+	sub_room->sub = room_sub_room;
 	if (!check_name_x_y(room->sub, sub_room))
 		return (0);
 	sub_room = add_room(&room_sub_room->sub);
 	sub_room->id = room->id;
-	sub_room->name = room->name;
-	ft_memdel((void **)&room_name);
+	sub_room->name = tmp;
+	sub_room->sub = room;
+	// ft_memdel((void **)&room_name);
 	return (1);
 }
 

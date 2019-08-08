@@ -12,23 +12,30 @@
 
 #include "lem_in.h"
 
-void		free_room(t_rooms *begin)
+void		free_rooms(t_rooms *begin)
 {
 	t_rooms *next;
-	t_rooms *next_sub;
 
 	while (begin)
 	{
 		next = begin->next;
-		while (begin->sub)
-		{
-			next_sub = begin->sub->next;
-			ft_memdel((void **)&begin->sub);
-			begin->sub = next_sub;
-		}
+		free_sub(begin->sub);
 		ft_memdel((void **)&begin->name);
 		ft_memdel((void **)&begin);
 		begin = next;
+	}
+}
+
+void		free_sub(t_rooms *sub)
+{
+	t_rooms *next_sub;
+
+	while (sub)
+	{
+		next_sub = sub->next;
+		ft_memdel((void **)&sub->name);
+		ft_memdel((void **)&sub);
+		sub = next_sub;
 	}
 }
 
