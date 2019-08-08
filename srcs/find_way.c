@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   find_way.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 09:48:28 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/25 09:48:29 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/08 19:55:33 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	fill_rooms(t_rooms *begin)
+void		fill_rooms(t_rooms *begin)
 {
 	t_rooms *iter_room;
 
@@ -24,7 +24,6 @@ void	fill_rooms(t_rooms *begin)
 		iter_room = iter_room->next;
 	}
 }
-
 
 void		delete_sub(t_rooms *room, char *name)
 {
@@ -58,7 +57,7 @@ void		delete_sub(t_rooms *room, char *name)
 ** change direct to unuse
 */
 
-t_queue			*find_way_one(t_rooms *end, int ant)
+t_queue		*find_way_one(t_rooms *end, int ant)
 {
 	t_rooms *iter_prev;
 	t_queue	*queue;
@@ -85,46 +84,20 @@ t_queue			*find_way_one(t_rooms *end, int ant)
 	return (queue);
 }
 
-void		print_res(t_mult_q *queue, int end_id, int i)
+void		del_node(t_mult_q *del)
 {
-	t_mult_q	*iter;
-	int			used[UINT16_MAX];
-	t_mult_q	*iter_q;
+	t_mult_q *prev;
 
-	iter = queue;
-	while (iter)
-	{
-		iter_q = iter;
-		ft_bzero(used, sizeof(used));
-		while (iter_q)
-		{
-			if (iter_q->queue && (!used[iter_q->queue->id_name] || iter_q->queue->id_name == end_id))
-			{
-				write(1, "L", 1);
-				ft_putnbr(iter_q->id + 1);
-				write(1, "-", 1);
-				ft_putstr(iter_q->queue->name);
-				write(1, " ", 1);
-				used[iter_q->queue->id_name] = 1;
-				ft_memdel((void **)&iter_q->queue->name);
-				pop_queue(&iter_q->queue);
-			}
-			iter_q = iter_q->next;
-		}
-		if (!iter->queue)
-			iter = iter->next;
-		if (i > 0)
-			write(1, "\n", 1);
-		i--;
-	}
+	prev = del->prev;
+	prev->next = NULL;
+	free_mult(&del);
 }
 
-int			find_way(t_rooms *begin, t_rooms *end, t_rooms *begin_room, int ants)
+int			find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
 {
 	int			i;
 	t_mult_q	*mult_queue;
 	t_mult_q	*iter_mult;
-	t_mult_q	*ants_queue;
 	int			tmp[100];
 
 	i = 0;
@@ -135,20 +108,14 @@ int			find_way(t_rooms *begin, t_rooms *end, t_rooms *begin_room, int ants)
 	{
 		if (i)
 			iter_mult = add_mult(iter_mult);
-		dijkstra(begin_room);
+		dijkstra(b_room);
 		iter_mult->queue = find_way_one(end, i);
 		if (i)
 			mult_queue->lines = relevance(tmp, i, &ants, iter_mult->prev);
 		fill_rooms(begin);
 		i++;
 	}
-	ants_queue = iter_mult->prev;
-	ants_queue->next = NULL;
-	free_mult(&iter_mult);
-	ants_queue = calculator(mult_queue, mult_queue->ants, tmp, i - 1);
-	ft_printf("lines = %i lin = %i\n", i, mult_queue->lines);
-	print_res(ants_queue, end->id, mult_queue->lines);
-	free_mult(&ants_queue);
-	free_mult(&mult_queue);
+	del_node(iter_mult);
+	calculator(mult_queue, end->id, tmp, i - 1);
 	return (1);
 }

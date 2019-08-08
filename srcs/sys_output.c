@@ -20,7 +20,8 @@ void	sys_out_rooms(t_rooms *begin)
 	tmp = begin;
 	while (tmp)
 	{
-		ft_printf("name = |%s| id = |%i| dist = |%i|\n", tmp->name, tmp->id, tmp->dist);
+		ft_printf("name = |%s| id = |%i| dist = |%i|\n",
+										tmp->name, tmp->id, tmp->dist);
 		tmp_sub = tmp->sub;
 		while (tmp_sub)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/19 15:09:51 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/19 15:09:52 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/08 19:36:00 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,68 +51,54 @@ int		add_name(t_rooms *begin, char *line, t_rooms *room, int id)
 	return (check_name_x_y(begin, room));
 }
 
-/*
-**	Need to make validation
-*/
+int		add_to_room(t_rooms **room, t_rooms *begin, char *line, int *id)
+{
+	*room = *id != 0 ? add_room(&begin) : *room;
+	if (!add_name(begin, line, *room, *id))
+		return (0);
+	(*id)++;
+	return (1);
+}
 
-// void	add_to_room(t_rooms *room, t_rooms *begin, char line, int id)
-// {
+int		choose_room(char *line)
+{
+	int	option;
 
-// }
-
+	option = 0;
+	if (!ft_strcmp(line, "##start"))
+		option = 1;
+	else if (!ft_strcmp(line, "##end"))
+		option = 2;
+	else if (ft_get_index(line, '-'))
+		option = 3;
+	else if (ft_strncmp(line, "#", 1))
+		option = 4;
+	return (option);
+}
 
 int		parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **begin_room)
 {
 	char	*line;
-	int		num_of_ants;
+	int		ants;
 	t_rooms *room;
 	int		id;
+	int		opt;
 
-	line = NULL;
-	num_of_ants = 0;
-	id = 0;
-	room = begin;
+	room = init_parse_data(&line, &ants, &id, begin);
 	while (get_next_line(fd, &line) && line[0] != '\n')
 	{
-		if (ft_strncmp(line, "#", 1))
-		{
-			if (!ft_get_index(line, '-') && num_of_ants)
-			{
-				room = id != 0 ? add_room(&begin) : room;
-				if (!add_name(begin, line, room, id))
-					return (0);
-				id++;
-			}
-			else if (num_of_ants)
-			{
-				if (!find_add_sub(begin, line))
-					return (0);
-			}
-			num_of_ants = num_of_ants ? num_of_ants : ft_atoi(line);
-		}
-		if (!ft_strcmp(line, "##end"))
-		{
-			ft_memdel((void **)&line);
-			get_next_line(fd, &line);
-			room = id != 0 ? add_room(&begin) : room;
-			if (!add_name(begin, line, room, id))
+		opt = choose_room(line);
+		if_end_start(opt, &line, fd);
+		if ((opt == 4 || opt == 2 || opt == 1) && ants)
+			if (!add_to_room(&room, begin, line, &id))
 				return (0);
-			*end = room;
-			id++;
-		}
-		if (!ft_strcmp(line, "##start"))
-		{
-			ft_memdel((void **)&line);
-			get_next_line(fd, &line);
-			room = id != 0 ? add_room(&begin) : room;
-			if (!add_name(begin, line, room, id))
-				return (0);
-			*begin_room = room;
-			id++;
-		}
+		if (opt == 3 && !find_add_sub(begin, line))
+			return (0);
+		*begin_room = opt == 1 ? room : *begin_room;
+		*end = opt == 2 ? room : *end;
+		ants = ants ? ants : ft_atoi(line);
 		ft_memdel((void **)&line);
 	}
 	ft_memdel((void **)&line);
-	ft_printf("num of ants = %i\n", num_of_ants);
-	return (num_of_ants);
+	return (ants);
 }

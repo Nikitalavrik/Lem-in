@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-t_queue		*create_queue()
+t_queue		*create_queue(void)
 {
 	t_queue	*queue;
 
@@ -45,7 +45,7 @@ void		pop_queue(t_queue **queue)
 	}
 }
 
-t_mult_q	*create_mult()
+t_mult_q	*create_mult(void)
 {
 	t_mult_q	*mult_queue;
 

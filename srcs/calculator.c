@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calculator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 13:33:25 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/29 13:33:26 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/08 19:55:47 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,16 @@ int			free_end(t_mult_q **mult, int len)
 	return (1);
 }
 
-t_mult_q	*calculator(t_mult_q *mult, int ants, int *tmp, int len)
+void		calculator(t_mult_q *mult, int end_id, int *tmp, int len)
 {
 	int			*count_paths;
 	t_mult_q	*ants_queue;
 
-	count_paths = counting_ants_path(tmp, ants, len);
+	count_paths = counting_ants_path(tmp, mult->ants, len);
 	free_end(&mult, len);
-	ants_queue = create_ants(mult, count_paths, ants);
+	ants_queue = create_ants(mult, count_paths, mult->ants);
 	ft_memdel((void **)&count_paths);
-	return (ants_queue);
+	print_res(ants_queue, end_id, mult->lines);
+	free_mult(&ants_queue);
+	free_mult(&mult);
 }
