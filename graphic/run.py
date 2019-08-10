@@ -13,7 +13,7 @@
 import pygame
 from game import Game
 from gameobj import GameObject
-from parse import parse_graph
+from parse import parse_all
 
 resolution = [1280, 852]
 node_image = "images/node.png"
@@ -22,7 +22,7 @@ ant_image = "images/ant.png"
 def create_game(graph):
 
 	run_game = Game("lem-in", resolution[0], resolution[1],
-								"images/background.png", 30, graph)
+								"images/background.png", 1, graph)
 	return (run_game)
 
 def create_node(game, graph):
@@ -40,11 +40,14 @@ def create_ants(game, start, num_of_ants):
 		game.objects.append(obj)
 	return (ants)
 
-start, num_of_ants, graph = parse_graph("../test/tst4")
-
+start, num_of_ants, ants_moves, graph = parse_all("../test/tst4")
 game = create_game(graph)
 
 create_node(game, graph)
 ants = create_ants(game, start, num_of_ants)
+game.ants_moves = ants_moves
+print(game.ants_moves)
+game.ants = ants
 
+print(graph)
 game.run()

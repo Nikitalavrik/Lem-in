@@ -15,11 +15,13 @@ from pygame.rect import Rect
 
 
 class GameObject:
-    def __init__(self, x, y, w, h, image_name, speed=(0,0)):
+    def __init__(self, x, y, w, h, image_name, speed=[0,0]):
         self.image = pygame.image.load(image_name).convert_alpha()
         self.bounds = self.image.get_rect()
         self.bounds.center = (x, y)
         self.speed = speed
+        self.x = x
+        self.y = y
 
     @property
     def left(self):
@@ -60,11 +62,10 @@ class GameObject:
     def draw(self, surface):
         surface.blit(self.image, self.bounds)
 
-    def move(self):
-        self.bounds = self.bounds.move(*self.speed)
+    def move(self, dx, dy):
+        self.bounds = self.bounds.move(dx, dy)
 
     def update(self):
         if self.speed == [0, 0]:
             return
-
-        # self.move(*self.speed)
+        self.move(*self.speed)

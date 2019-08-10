@@ -14,7 +14,7 @@ import os
 import pygame
 import sys
 
-
+from parse import find_node
 from collections import defaultdict
 
 
@@ -38,9 +38,12 @@ class Game:
         pygame.display.set_caption(caption)
         self.clock = pygame.time.Clock()
         self.keydown_handlers = defaultdict(list)
+        self.keydown_handlers[pygame.K_SPACE] = self.handle_space
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
         self.graph = graph
+        self.ants_moves = []
+        self.ants = []
 
     def update(self):
         for o in self.objects:
@@ -65,16 +68,31 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                for handler in self.keydown_handlers[event.key]:
-                    handler(event.key)
+                self.keydown_handlers[event.key]()
+                   
             elif event.type == pygame.KEYUP:
-                for handler in self.keydown_handlers[event.key]:
+                for handler in self.keyup_handlers[event.key]:
                     handler(event.key)
             elif event.type in (pygame.MOUSEBUTTONDOWN, 
                                 pygame.MOUSEBUTTONUP, 
                                 pygame.MOUSEMOTION):
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
+    
+    def handle_space(self):
+        if (self.ants_moves):
+            move = self.ants_moves.pop(0)
+            for ant in move:
+                where_to_move = find_node(self.graph, ant.move)
+                obj_ant = self.ants[ant.id - 1]
+                print(abs(where_to_move.x - obj_ant.x),
+                    abs(where_to_move.y - obj_ant.y))
+                obj_ant.speed = [abs(where_to_move.x - obj_ant.x),
+                        abs(where_to_move.y - obj_ant.y)]
+                self.update()
+                obj_ant.speed = [0,0]
+
+
     def run(self):
         self.surface.blit(self.background_image, (0, 0))
         self.create_lines()
