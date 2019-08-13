@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 11:30:34 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/09 17:39:28 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/13 17:27:20 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ class Game:
                  height, 
                  back_image_filename, 
                  frame_rate,
-                 graph):
+                 graph,
+                 start,
+                 end):
         self.background_image = \
             pygame.image.load(back_image_filename)
         self.frame_rate = frame_rate
@@ -44,6 +46,8 @@ class Game:
         self.graph = graph
         self.ants_moves = []
         self.ants = []
+        self.start = start
+        self.end = end
 
     def update(self):
         for o in self.objects:
@@ -61,6 +65,11 @@ class Game:
             for link in node.links:
                 pygame.draw.line(self.surface, (0, 0, 0),
                                     (node.x, node.y), (link.x, link.y), 3)
+    def draw_text(self):
+        font = pygame.font.SysFont('Calibri', 40)
+        self.surface.blit(font.render("Start - " + self.start.name, True, (255, 255, 0)), (10,10))
+        font = pygame.font.SysFont('Calibri', 40)
+        self.surface.blit(font.render("End - " + self.end.name, True, (255, 255, 0)), (10,70))
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -68,7 +77,8 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                self.keydown_handlers[event.key]()
+                if event.key in self.keydown_handlers.keys():
+                    self.keydown_handlers[event.key]()
                    
             elif event.type == pygame.KEYUP:
                 for handler in self.keyup_handlers[event.key]:
@@ -85,22 +95,23 @@ class Game:
             for ant in move:
                 where_to_move = find_node(self.graph, ant.move)
                 obj_ant = self.ants[ant.id - 1]
-                print(abs(where_to_move.x - obj_ant.x),
-                    abs(where_to_move.y - obj_ant.y))
-                obj_ant.speed = [abs(where_to_move.x - obj_ant.x),
-                        abs(where_to_move.y - obj_ant.y)]
-                self.update()
-                obj_ant.speed = [0,0]
-
+                if (obj_ant.x, obj_ant.y) != obj_ant.bounds.center:
+                    break
+                dx = where_to_move.x - obj_ant.x
+                dy = where_to_move.y - obj_ant.y
+                dx = dx - dx % 10
+                dy = dy - dy % 10
+                obj_ant.x += dx
+                obj_ant.y += dy
+                obj_ant.speed = [dx / 10, dy / 10]
 
     def run(self):
-        self.surface.blit(self.background_image, (0, 0))
-        self.create_lines()
         while not self.game_over:
-            
-            self.handle_events()
+            self.surface.blit(self.background_image, (0, 0))
+            self.create_lines()
             self.update()
             self.draw()
-
+            self.draw_text()
+            self.handle_events()
             pygame.display.update()
             self.clock.tick(self.frame_rate)

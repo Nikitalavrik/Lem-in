@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 19:47:14 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/09 17:48:15 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/13 16:40:06 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		main(void)
 	t_rooms	*end;
 	t_rooms	*begin_room;
 
-	fd = open("test/tst4", O_RDONLY);
+	fd = open("test/tst10", O_RDONLY);
 	end = NULL;
 	begin_room = NULL;
 	begin = create_room();

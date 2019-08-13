@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 15:36:23 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/09 18:10:56 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/13 17:15:53 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ class Node:
 		self.x = x
 		self.y = y
 		self.links = []
+		self.num_of_ants = 0
 	
 	def add_link(self, node):
 		self.links.append(node)

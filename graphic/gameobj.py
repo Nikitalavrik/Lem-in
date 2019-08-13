@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 12:21:30 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/09 17:21:31 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/13 17:15:00 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,57 +15,25 @@ from pygame.rect import Rect
 
 
 class GameObject:
-    def __init__(self, x, y, w, h, image_name, speed=[0,0]):
+    def __init__(self, x, y, image_name, speed=[0,0], name=0):
         self.image = pygame.image.load(image_name).convert_alpha()
         self.bounds = self.image.get_rect()
         self.bounds.center = (x, y)
         self.speed = speed
         self.x = x
         self.y = y
-
-    @property
-    def left(self):
-        return self.bounds.left
-
-    @property
-    def right(self):
-        return self.bounds.right
-
-    @property
-    def top(self):
-        return self.bounds.top
-
-    @property
-    def bottom(self):
-        return self.bounds.bottom
-
-    @property
-    def width(self):
-        return self.bounds.width
-
-    @property
-    def height(self):
-        return self.bounds.height
-
-    @property
-    def center(self):
-        return self.bounds.center
-
-    @property
-    def centerx(self):
-        return self.bounds.centerx
-
-    @property
-    def centery(self):
-        return self.bounds.centery
+        self.name = name
 
     def draw(self, surface):
         surface.blit(self.image, self.bounds)
-
+        if self.name:
+            font = pygame.font.SysFont('Calibri', 40)
+            surface.blit(font.render(self.name, True, (255, 255, 0)), self.bounds)
+        
     def move(self, dx, dy):
         self.bounds = self.bounds.move(dx, dy)
 
     def update(self):
-        if self.speed == [0, 0]:
+        if self.speed == [0, 0] or (self.bounds.center == (self.x, self.y)):
             return
         self.move(*self.speed)
