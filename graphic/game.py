@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 11:30:34 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/13 17:27:20 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/13 18:09:05 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,12 @@ class Game:
         self.ants = []
         self.start = start
         self.end = end
+        self.end_index = 0
+        for g in self.graph:
+            if g == self.end:
+                break
+            self.end_index += 1
+
 
     def update(self):
         for o in self.objects:
@@ -70,6 +76,11 @@ class Game:
         self.surface.blit(font.render("Start - " + self.start.name, True, (255, 255, 0)), (10,10))
         font = pygame.font.SysFont('Calibri', 40)
         self.surface.blit(font.render("End - " + self.end.name, True, (255, 255, 0)), (10,70))
+
+    def check_end(self):
+        font = pygame.font.SysFont('Calibri', 40)
+        self.surface.blit(font.render(str(self.end.num_of_ants), True, (49, 0, 179)),
+        (self.objects[self.end_index].bounds[0] + 60, self.objects[self.end_index].bounds[1] + 116))
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -103,6 +114,8 @@ class Game:
                 dy = dy - dy % 10
                 obj_ant.x += dx
                 obj_ant.y += dy
+                if ant.move == self.end.name:
+                    self.end.num_of_ants += 1
                 obj_ant.speed = [dx / 10, dy / 10]
 
     def run(self):
@@ -112,6 +125,7 @@ class Game:
             self.update()
             self.draw()
             self.draw_text()
+            self.check_end()
             self.handle_events()
             pygame.display.update()
             self.clock.tick(self.frame_rate)

@@ -2,5 +2,4 @@ obj
 .vscode
 lem-in
 test_out
-graphic/__pycache__
-
+__pycache__
