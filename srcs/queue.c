@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   queue.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 14:15:27 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/24 14:15:28 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/15 18:14:16 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void		push_queue(t_queue **queue, char *name)
 
 	front = create_queue();
 	front->next = (*queue);
+	if (*queue)
+		(*queue)->prev = front;
 	front->name = name;
 	(*queue) = front;
 }

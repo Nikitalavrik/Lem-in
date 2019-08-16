@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 13:33:25 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/08 19:55:47 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/16 17:53:49 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,9 @@ void		calculator(t_mult_q *mult, int end_id, int *tmp, int len)
 	free_end(&mult, len);
 	ants_queue = create_ants(mult, count_paths, mult->ants);
 	ft_memdel((void **)&count_paths);
-	print_res(ants_queue, end_id, mult->lines);
+	// print_res(ants_queue, end_id, mult->lines);
+	end_id = 0;
+	ft_printf("lines = %i\n", mult->lines);
 	free_mult(&ants_queue);
 	free_mult(&mult);
 }

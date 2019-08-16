@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 11:30:34 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/13 18:09:05 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/15 13:59:38 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.keydown_handlers = defaultdict(list)
         self.keydown_handlers[pygame.K_SPACE] = self.handle_space
-        self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
         self.graph = graph
         self.ants_moves = []
@@ -71,14 +70,29 @@ class Game:
             for link in node.links:
                 pygame.draw.line(self.surface, (0, 0, 0),
                                     (node.x, node.y), (link.x, link.y), 3)
+    def close(self):
+        x, y, w, h = 1198, 20, 60, 20
+        pygame.draw.rect(self.surface, (153 , 77, 0), (x, y, w, h))
+        font = pygame.font.SysFont('Calibri', 30)
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        if (x + w > mouse[0] and y + h > mouse[1]):
+            font = self.surface.blit(font.render("Close", True, (0, 48, 143)), (x + 2, y, w + 40, h * 2))
+            if click[0] == 1:
+                pygame.quit()
+                sys.exit()
+        else:
+            font = self.surface.blit(font.render("Close", True, (255, 255, 0)), (x + 2, y, w + 40, h * 2))
     def draw_text(self):
-        font = pygame.font.SysFont('Calibri', 40)
+        font = pygame.font.SysFont('Calibri', 30)
         self.surface.blit(font.render("Start - " + self.start.name, True, (255, 255, 0)), (10,10))
-        font = pygame.font.SysFont('Calibri', 40)
-        self.surface.blit(font.render("End - " + self.end.name, True, (255, 255, 0)), (10,70))
+        font = pygame.font.SysFont('Calibri', 30)
+        self.surface.blit(font.render("End - " + self.end.name, True, (255, 255, 0)), (10,50))
+        font = pygame.font.SysFont('Calibri', 30)
+        self.surface.blit(font.render("Space - Step", True, (255, 255, 0)), (10,90))
 
     def check_end(self):
-        font = pygame.font.SysFont('Calibri', 40)
+        font = pygame.font.SysFont('Calibri', 35)
         self.surface.blit(font.render(str(self.end.num_of_ants), True, (49, 0, 179)),
         (self.objects[self.end_index].bounds[0] + 60, self.objects[self.end_index].bounds[1] + 116))
 
@@ -90,15 +104,6 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key in self.keydown_handlers.keys():
                     self.keydown_handlers[event.key]()
-                   
-            elif event.type == pygame.KEYUP:
-                for handler in self.keyup_handlers[event.key]:
-                    handler(event.key)
-            elif event.type in (pygame.MOUSEBUTTONDOWN, 
-                                pygame.MOUSEBUTTONUP, 
-                                pygame.MOUSEMOTION):
-                for handler in self.mouse_handlers:
-                    handler(event.type, event.pos)
     
     def handle_space(self):
         if (self.ants_moves):
@@ -107,6 +112,7 @@ class Game:
                 where_to_move = find_node(self.graph, ant.move)
                 obj_ant = self.ants[ant.id - 1]
                 if (obj_ant.x, obj_ant.y) != obj_ant.bounds.center:
+                    self.ants_moves.insert(0, move)
                     break
                 dx = where_to_move.x - obj_ant.x
                 dy = where_to_move.y - obj_ant.y
@@ -126,6 +132,7 @@ class Game:
             self.draw()
             self.draw_text()
             self.check_end()
+            self.close()
             self.handle_events()
             pygame.display.update()
             self.clock.tick(self.frame_rate)

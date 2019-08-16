@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 12:21:30 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/13 17:15:00 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/15 13:25:14 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ class GameObject:
     def draw(self, surface):
         surface.blit(self.image, self.bounds)
         if self.name:
-            font = pygame.font.SysFont('Calibri', 40)
+            font = pygame.font.SysFont('Calibri', 35)
             surface.blit(font.render(self.name, True, (255, 255, 0)), self.bounds)
         
     def move(self, dx, dy):

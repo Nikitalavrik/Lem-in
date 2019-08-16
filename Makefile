@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/25 17:55:29 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/08 19:47:45 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/16 16:28:08 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,9 @@ SRC =	main.c			\
 		find_way.c		\
 		free_all.c		\
 		calculator.c	\
-		parse_staff.c	\
+		usefull_staff.c	\
 		print_pass.c	\
+		superpos.c		\
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
