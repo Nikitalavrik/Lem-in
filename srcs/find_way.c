@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 09:48:28 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/16 17:56:49 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/17 20:33:23 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,58 @@ t_queue		*find_way_one(t_rooms *end, int ant)
 		iter_prev = iter_prev->prev_answer;
 		delete_sub(iter_prev, queue->name);
 		if (iter_prev->prev_answer)
+		{
 			iter_prev->dist = UINT16_MAX;
+			iter_prev->prev_dist = ant;
+		}
 		dist++;
 	}
 	queue->dist = dist;
 	return (queue);
 }
 
-void		del_node(t_mult_q *del, t_mult_q *mult, int *tmp)
+void		del_node(t_mult_q *del)
 {
 	t_mult_q *prev;
 
-	recalc(mult, tmp);
+	// recalc(mult, tmp, 1);
 	prev = del->prev;
 	prev->next = NULL;
 	free_mult(&del);
+}
+
+t_queue		**in_queue(t_mult_q	*mult, t_queue *queue, int *i)
+{
+	t_mult_q	*iter_mult;
+	t_queue		*q1;
+	t_queue		*q2;
+
+	iter_mult = mult;
+	q1 = queue;
+	*i = 0;
+	while (iter_mult->next)
+	{
+		q2 = iter_mult->queue;
+		while (q2->next)
+		{
+			q1 = queue;
+			while (q1->next)
+			{
+				if (q1->id_name == q2->id_name)
+				{
+					(*i)++;
+					ft_printf("q1 id = %i q2 id %i name = %s\n",
+					q1->id, q2->id, q1->name);
+				}
+				q1 = q1->next;
+			}
+			q2 = q2->next;
+		}
+		if (*i)
+			return (&iter_mult->queue);
+		iter_mult = iter_mult->next;
+	}
+	return (NULL);
 }
 
 void		find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
@@ -102,18 +139,23 @@ void		find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
 	mult->iter_ants = ants;
 	while (mult->iter_ants > 0)
 	{
-		i_mult = i ? add_mult(i_mult) : i_mult;
+		i_mult = i && mult->recalc ? add_mult(i_mult) : i_mult;
 		dijkstra(b_room);
 		i_mult->queue = find_way_one(end, i);
 		if (i)
 		{
-			mult->recalc = analyze_queue(&i_mult->prev->queue, &i_mult->queue);
-			mult->lines = relevance(tmp, i, &mult->iter_ants, i_mult->prev);
+			mult->recalc = analyze_queue(mult, i_mult, tmp);
+			if (mult->recalc)
+				mult->lines = relevance(tmp, i, &mult->iter_ants, i_mult->prev);
 		}
 		fill_rooms(begin);
-		i++;
+		i += mult->recalc;
 	}
-	del_node(i_mult, mult, tmp);
+	// del_node(i_mult);
+	recalc(mult, tmp, 1);
+	// del_node(i_mult);
+	sys_out_dist(tmp, i);
 	sys_out_mult(mult);
+	// mult->lines += 12;
 	calculator(mult, end->id, tmp, i - 1);
 }

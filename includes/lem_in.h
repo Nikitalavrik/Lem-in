@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/19 15:10:54 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/16 17:25:33 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/17 18:15:45 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct		s_mult_q
 	int				ants;
 	int				iter_ants;
 	int				recalc;
+	int				end;
 	struct s_queue	*queue;
 	struct s_queue	*compare_q;
 	struct s_mult_q	*next;
@@ -70,7 +71,7 @@ int					dijkstra(t_rooms *begin_room);
 void				find_way(t_rooms *begin, t_rooms *end, t_rooms *b,
 																	int ants);
 int					relevance(int *tmp, int i, int *ants, t_mult_q *mult);
-int					analyze_queue(t_queue **prev_q, t_queue **queue);
+int					analyze_queue(t_mult_q *mult, t_mult_q *last, int *tmp);
 void				print_res(t_mult_q *queue, int end_id, int i);
 
 void				sys_out_dist(int *dist, int n);
@@ -85,7 +86,7 @@ t_rooms				*find_room(t_rooms *begin, char *room_name);
 t_rooms				*go_throught(t_rooms *begin, int steps);
 
 void				calculator(t_mult_q *mult, int end_id, int *tmp, int len);
-int					recalc(t_mult_q *mult, int *tmp);
+int					recalc(t_mult_q *mult, int *tmp, int end);
 
 t_mult_q			*create_mult();
 t_mult_q			*add_mult(t_mult_q *begin);
@@ -96,6 +97,7 @@ void				pop_queue(t_queue **queue);
 void				swap_queue_id(t_queue **q1, t_queue **q2);
 int					is_identical_queue(t_queue *q1, t_queue *q2);
 int					check_if_in_queue(t_queue **queue, int id_name);
+t_queue				**in_queue(t_mult_q	*mult, t_queue *queue, int *overlap);
 
 void				free_queue(t_queue **queue);
 void				free_rooms(t_rooms *begin);

@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 19:35:36 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/16 17:50:48 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/17 18:19:28 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_rooms	*init_parse_data(char **line, int *ants, int *id, t_rooms *begin)
 	return (begin);
 }
 
-int		recalc(t_mult_q *mult, int *tmp)
+int		recalc(t_mult_q *mult, int *tmp, int end)
 {
 	t_mult_q	*iter_m;
 	int			i;
@@ -40,11 +40,13 @@ int		recalc(t_mult_q *mult, int *tmp)
 	mult->iter_ants = mult->ants;
 	while (iter_m)
 	{
+		if (!iter_m->next)
+			iter_m->prev->end = end;
 		if (i)
 			mult->lines = relevance(tmp, i, &mult->iter_ants, iter_m->prev);
 		i++;
 		iter_m = iter_m->next;
-	}
+	} 
 	return (i);
 }
 

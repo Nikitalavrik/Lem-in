@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 14:15:27 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/15 18:14:16 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/17 14:38:09 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ t_mult_q	*create_mult(void)
 	t_mult_q	*mult_queue;
 
 	mult_queue = ft_memalloc(sizeof(t_mult_q));
-	mult_queue->next = NULL;
-	mult_queue->queue = NULL;
+	mult_queue->recalc = 1;
 	return (mult_queue);
 }
 

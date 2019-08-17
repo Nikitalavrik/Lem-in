@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 10:09:43 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/16 17:52:59 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/17 20:26:58 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,15 @@ int			check_if_in_queue(t_queue **queue, int id_name)
 	{
 		if (iter_q->id_name == id_name)
 		{
-			*queue = iter_q;
+			while (iter_q && iter_q->id_name == id_name)
+			{
+				*queue = iter_q;
+				// ft_printf("dist = %i %i\n", iter_q->room->dist, INT16_MAX);
+				iter_q = iter_q->next;
+			}
 			return (1);
 		}
+
 		iter_q = iter_q->next;
 	}
 	return (0);
@@ -35,7 +41,7 @@ void		push_room(t_queue **queue, t_rooms *iter_sub,
 	push_queue(queue, iter_sub->name);
 	(*queue)->room = walk;
 	walk->prev_answer = i_room;
-	walk->prev_dist = walk->dist;
+	// walk->prev_dist = walk->dist;
 	walk->dist = i_room->dist + iter_sub->path;
 }
 
@@ -57,9 +63,7 @@ int			dijkstra(t_rooms *begin_room)
 		while (iter_sub && i_room->dist != UINT16_MAX)
 		{
 			walk = iter_sub->sub;
-			if ((walk->dist > i_room->dist + iter_sub->path || !walk->dist)
-			&& ((walk->prev_dist != UINT16_MAX) ||\
-			(walk->prev_dist == UINT16_MAX && i_room->prev_dist == UINT16_MAX)))
+			if ((walk->dist > i_room->dist + iter_sub->path || !walk->dist))
 				push_room(&queue, iter_sub, walk, i_room);
 			iter_sub = iter_sub->next;
 		}
@@ -75,7 +79,7 @@ int			relevance(int *tmp, int i, int *ants, t_mult_q *mult)
 	lines = 0;
 	if (*ants > 0)
 	{
-		if (mult->queue->id_name != mult->next->queue->id_name)
+		if (!mult->end)
 		{
 			tmp[i - 1] = mult->next->queue->dist - mult->queue->dist;
 			if ((i * tmp[i - 1]) >= *ants)

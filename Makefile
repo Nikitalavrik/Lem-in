@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/25 17:55:29 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/16 16:28:08 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/17 17:41:32 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 all: $(NAME) 
 
 $(NAME): $(LIB) $(PRINTF) $(OBJS)
-		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g
+		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g -fsanitize=address
 	
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		@mkdir -p $(OBJ_DIR)
