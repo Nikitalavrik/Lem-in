@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 12:21:24 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/15 13:32:11 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/28 20:12:37 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,9 @@ from gameobj import GameObject
 from parse import parse_all, find_node
 
 resolution = [1280, 852]
-node_image = "images/node.png"
-ant_image = "images/ant.png"
-image_back = "images/background.png"
+node_image = "graphic/images/node.png"
+ant_image = "graphic/images/ant.png"
+image_back = "graphic/images/background.png"
 koef = resolution[0] / resolution[1]
 fps = 30
 
@@ -54,23 +54,30 @@ def create_ants(game, start, num_of_ants):
 		game.objects.append(obj)
 	return (ants)
 
-if (len(sys.argv) == 2):
+if (len(sys.argv) == 3 and sys.argv[1] == "-f"):
 	try:
-		start, num_of_ants, ants_moves, graph = parse_all(sys.argv[1])
+		start, num_of_ants, ants_moves, graph = parse_all(sys.argv[2], 0)
 	except:
-		print("Enter correct filename")
+		print("Bad file name")
 		exit(0)
-		
-	end = find_node(graph, ants_moves[-1][-1].move)
-	if len(graph) > 10:
-		print("BIG GRAPH")
-		exit()
-
-	game = create_game(graph, start, end)
-	create_node(game, graph)
-	ants = create_ants(game, start, num_of_ants)
-	game.ants_moves = ants_moves
-	game.ants = ants
-	game.run()
+elif (len(sys.argv) == 1):
+	try:
+		start, num_of_ants, ants_moves, graph = parse_all("", 1)
+	except:
+		print("Bad file name")
+		exit(0)
 else:
-	print("Enter filename")
+	print("Enter filename")	
+	# start, num_of_ants, ants_moves, graph = parse_all(sys.argv[1])
+
+end = find_node(graph, ants_moves[-1][-1].move)
+if len(graph) > 10:
+	print("BIG GRAPH")
+	exit()
+
+game = create_game(graph, start, end)
+create_node(game, graph)
+ants = create_ants(game, start, num_of_ants)
+game.ants_moves = ants_moves
+game.ants = ants
+game.run()

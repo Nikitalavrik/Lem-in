@@ -6,11 +6,12 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 15:36:23 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/13 17:15:53 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/28 20:16:00 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import os
+import fileinput
 
 class Node:
 	def __init__(self, name, x, y):
@@ -66,11 +67,16 @@ def	parse_moves(line):
 			one_move.append(Move(int(splited[0][1:]), splited[1]))
 	return (one_move)
 
-def parse_all(path):
+def parse_all(path, option):
 	graph = []
 	prev_line = ""
 	start = 0
 	ant_moves = []
+	if (option):
+		path = "temp"
+		with open(path, 'w') as f:
+			for line in fileinput.input():
+				f.write(line)
 	with open(path, 'r') as f:
 		ants = int(f.readline())
 		while True:
@@ -85,4 +91,6 @@ def parse_all(path):
 			one_move = parse_moves(line)
 			if one_move:
 				ant_moves.append(one_move)
+	if (option):
+		os.remove(path)
 	return (start, ants, ant_moves, graph)
