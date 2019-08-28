@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 10:09:43 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/17 20:26:58 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/28 18:18:11 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,47 @@ int			check_if_in_queue(t_queue **queue, int id_name)
 			while (iter_q && iter_q->id_name == id_name)
 			{
 				*queue = iter_q;
-				// ft_printf("dist = %i %i\n", iter_q->room->dist, INT16_MAX);
 				iter_q = iter_q->next;
 			}
 			return (1);
 		}
-
 		iter_q = iter_q->next;
 	}
 	return (0);
 }
 
-void		push_room(t_queue **queue, t_rooms *iter_sub,
+int			next_queue(t_rooms *room, int id)
+{
+	t_rooms *iter_sub;
+
+	iter_sub = room->sub;
+	while (iter_sub)
+	{
+		if (iter_sub->prev_dist == id)
+			return (1);
+		iter_sub = iter_sub->next;
+	}
+	return (0);
+}
+
+int			push_room(t_queue **queue, t_rooms *iter_sub,
 						t_rooms *walk, t_rooms *i_room)
 {
+	int	ret;
+
+	ret = 0;
+	if (walk->dist == UINT16_MAX)
+	{
+		if (!next_queue(walk, walk->prev_dist))
+			return (ret);
+		else
+			ret = 1;
+	}
 	push_queue(queue, iter_sub->name);
 	(*queue)->room = walk;
 	walk->prev_answer = i_room;
-	// walk->prev_dist = walk->dist;
 	walk->dist = i_room->dist + iter_sub->path;
+	return (ret);
 }
 
 int			dijkstra(t_rooms *begin_room)
@@ -51,10 +73,12 @@ int			dijkstra(t_rooms *begin_room)
 	t_rooms	*i_room;
 	t_rooms	*iter_sub;
 	t_rooms *walk;
+	int		count;
 
 	queue = create_queue();
 	queue->room = begin_room;
 	begin_room->dist = 0;
+	count = 0;
 	while (queue && queue->room)
 	{
 		i_room = queue->room;
@@ -64,7 +88,7 @@ int			dijkstra(t_rooms *begin_room)
 		{
 			walk = iter_sub->sub;
 			if ((walk->dist > i_room->dist + iter_sub->path || !walk->dist))
-				push_room(&queue, iter_sub, walk, i_room);
+				count += push_room(&queue, iter_sub, walk, i_room);
 			iter_sub = iter_sub->next;
 		}
 	}

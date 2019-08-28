@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rooms.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlavrine <nlavrine@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/19 15:09:59 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/07/19 15:10:01 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:23:43 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,24 @@ int			find_add_sub(t_rooms *begin, char *line)
 {
 	t_rooms	*sub_room;
 	t_rooms	*room;
-	t_rooms	*room_sub_room;
+	t_rooms	*room_sub_r;
 	char	**splited;
 
 	splited = ft_strsplit((const char *)line, '-');
-	if (!(room = find_room(begin, splited[0])))
-		return (0);
+	check_split_len(splited);
+	if (!(room = find_room(begin, splited[0])) || !check_splited(line))
+		print_error("Linking error: wrong room name");
 	sub_room = add_room(&room->sub);
-	if (!(room_sub_room = find_room(begin, splited[1])))
-		return (0);
-	sub_room->id = room_sub_room->id;
+	if (!(room_sub_r = find_room(begin, splited[1])) || room == room_sub_r)
+		print_error("Linking error: wrong room name");
+	sub_room->id = room_sub_r->id;
 	sub_room->name = ft_strdup(splited[1]);
-	sub_room->x = room_sub_room->x;
-	sub_room->y = room_sub_room->y;
-	sub_room->sub = room_sub_room;
+	sub_room->x = room_sub_r->x;
+	sub_room->y = room_sub_r->y;
+	sub_room->sub = room_sub_r;
 	if (!check_name_x_y(room->sub, sub_room))
-		return (0);
-	sub_room = add_room(&room_sub_room->sub);
+		print_error("Linking error: room with same name or coords");
+	sub_room = add_room(&room_sub_r->sub);
 	sub_room->id = room->id;
 	sub_room->name = ft_strdup(splited[0]);
 	sub_room->sub = room;

@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/25 17:55:29 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/17 17:41:32 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/28 18:26:14 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC =	main.c			\
 		usefull_staff.c	\
 		print_pass.c	\
 		superpos.c		\
+		parse_staff.c	\
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
@@ -40,7 +41,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 all: $(NAME) 
 
 $(NAME): $(LIB) $(PRINTF) $(OBJS)
-		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g -fsanitize=address
+		@$(CC) $(FLAGS) $(OBJS) $(PRINTF) $(LIB) -o $(NAME) -g
 	
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		@mkdir -p $(OBJ_DIR)

@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/19 15:10:54 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/17 18:15:45 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:44:06 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct		s_mult_q
 	int				iter_ants;
 	int				recalc;
 	int				end;
+	int				id_name;
 	struct s_queue	*queue;
 	struct s_queue	*compare_q;
 	struct s_mult_q	*next;
@@ -55,20 +56,31 @@ typedef struct		s_rooms
 	int				x;
 	int				y;
 	int				prev_dist;
+	int				flags;
+	int				opt;
 	struct s_rooms	*sub;
 	struct s_rooms	*prev;
 	struct s_rooms	*prev_answer;
 	struct s_rooms	*next;
 }					t_rooms;
 
-int					parsing(t_rooms *begin, int fd, t_rooms **end, t_rooms **b);
-void				if_end_start(int opt, char **line, int fd);
+int					only_digit(char *str);
+int					ft_splitlen(char **splited);
+void				check_split_len(char **splited);
+void				print_error(char *str);
+void				if_end_start(t_rooms *main, char **line,\
+										t_rooms *begin, t_rooms *end);
+int					parsing(t_rooms *begin, t_rooms **end,\
+										t_rooms **begin_room);
+void				clear_split(char **splited);
+int					check_splited(char *line);
 int					check_name_x_y(t_rooms *begin, t_rooms *room);
 t_rooms				*init_parse_data(char **line, int *ants, int *id,
 																t_rooms *begin);
 
+void				sort_mult(t_mult_q *mult);
 int					dijkstra(t_rooms *begin_room);
-void				find_way(t_rooms *begin, t_rooms *end, t_rooms *b,
+int					find_way(t_rooms *begin, t_rooms *end, t_rooms *b,
 																	int ants);
 int					relevance(int *tmp, int i, int *ants, t_mult_q *mult);
 int					analyze_queue(t_mult_q *mult, t_mult_q *last, int *tmp);
@@ -85,7 +97,7 @@ t_rooms				*add_room(t_rooms **begin);
 t_rooms				*find_room(t_rooms *begin, char *room_name);
 t_rooms				*go_throught(t_rooms *begin, int steps);
 
-void				calculator(t_mult_q *mult, int end_id, int *tmp, int len);
+int					calculator(t_mult_q *mult, int end_id, int *tmp, int len);
 int					recalc(t_mult_q *mult, int *tmp, int end);
 
 t_mult_q			*create_mult();
@@ -98,6 +110,7 @@ void				swap_queue_id(t_queue **q1, t_queue **q2);
 int					is_identical_queue(t_queue *q1, t_queue *q2);
 int					check_if_in_queue(t_queue **queue, int id_name);
 t_queue				**in_queue(t_mult_q	*mult, t_queue *queue, int *overlap);
+t_queue				*reshape_queue(t_queue *iter_q, int id, long *dist);
 
 void				free_queue(t_queue **queue);
 void				free_rooms(t_rooms *begin);

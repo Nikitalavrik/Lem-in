@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 09:48:28 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/17 20:33:23 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:41:12 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_queue		*find_way_one(t_rooms *end, int ant)
 	iter_prev = end;
 	queue = NULL;
 	dist = 0;
-	while (iter_prev->prev_answer)
+	while (iter_prev && iter_prev->prev_answer)
 	{
 		push_queue(&queue, iter_prev->name);
 		queue->id = ant;
@@ -77,55 +77,31 @@ t_queue		*find_way_one(t_rooms *end, int ant)
 		}
 		dist++;
 	}
-	queue->dist = dist;
+	if (queue)
+		queue->dist = dist;
 	return (queue);
 }
 
-void		del_node(t_mult_q *del)
+int			iterate_ways(t_mult_q *mult, t_mult_q *i_mult, int *i, int *tmp)
 {
-	t_mult_q *prev;
-
-	// recalc(mult, tmp, 1);
-	prev = del->prev;
-	prev->next = NULL;
-	free_mult(&del);
-}
-
-t_queue		**in_queue(t_mult_q	*mult, t_queue *queue, int *i)
-{
-	t_mult_q	*iter_mult;
-	t_queue		*q1;
-	t_queue		*q2;
-
-	iter_mult = mult;
-	q1 = queue;
-	*i = 0;
-	while (iter_mult->next)
+	if (!i_mult->queue)
+		print_error("Solving: no way found");
+	if (*i)
 	{
-		q2 = iter_mult->queue;
-		while (q2->next)
+		if (i_mult->queue->id_name == mult->id_name)
 		{
-			q1 = queue;
-			while (q1->next)
-			{
-				if (q1->id_name == q2->id_name)
-				{
-					(*i)++;
-					ft_printf("q1 id = %i q2 id %i name = %s\n",
-					q1->id, q2->id, q1->name);
-				}
-				q1 = q1->next;
-			}
-			q2 = q2->next;
+			(*i)++;
+			return (0);
 		}
-		if (*i)
-			return (&iter_mult->queue);
-		iter_mult = iter_mult->next;
+		mult->id_name = i_mult->queue->id_name;
+		mult->recalc = analyze_queue(mult, i_mult, tmp);
+		if (mult->recalc)
+			mult->lines = relevance(tmp, *i, &mult->iter_ants, i_mult->prev);
 	}
-	return (NULL);
+	return (1);
 }
 
-void		find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
+int			find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
 {
 	int			i;
 	t_mult_q	*mult;
@@ -142,20 +118,12 @@ void		find_way(t_rooms *begin, t_rooms *end, t_rooms *b_room, int ants)
 		i_mult = i && mult->recalc ? add_mult(i_mult) : i_mult;
 		dijkstra(b_room);
 		i_mult->queue = find_way_one(end, i);
-		if (i)
-		{
-			mult->recalc = analyze_queue(mult, i_mult, tmp);
-			if (mult->recalc)
-				mult->lines = relevance(tmp, i, &mult->iter_ants, i_mult->prev);
-		}
+		if (!iterate_ways(mult, i_mult, &i, tmp))
+			break ;
 		fill_rooms(begin);
 		i += mult->recalc;
 	}
-	// del_node(i_mult);
+	sort_mult(mult);
 	recalc(mult, tmp, 1);
-	// del_node(i_mult);
-	sys_out_dist(tmp, i);
-	sys_out_mult(mult);
-	// mult->lines += 12;
-	calculator(mult, end->id, tmp, i - 1);
+	return (calculator(mult, end->id, tmp, i - 1));
 }
