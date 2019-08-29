@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 16:25:00 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/28 18:19:59 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/29 14:37:42 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,10 @@ int			analyze_queue(t_mult_q *mult, t_mult_q *last, int *tmp)
 	prev_q = in_queue(iter_mult, last->queue, &overlap);
 	if (overlap == 1)
 	{
-		ft_printf("dist = %i\n", last->queue->dist);
 		free_queue(&last->queue);
 		return (0);
 	}
-	if (overlap > 1)
+	if (overlap > 1 && mult->ants > 2)
 	{
 		cut_paths(prev_q, &last->queue);
 		sort_mult(mult);

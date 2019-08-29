@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/25 17:55:29 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/28 18:26:14 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/29 15:54:11 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,5 +65,3 @@ fclean: clean
 	@make -C ./libft/ft_printf/ fclean
 
 re: fclean all
-	@make -C ./libft/ re
-	@make -C ./libft/ft_printf/ re

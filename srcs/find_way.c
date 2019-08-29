@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 09:48:28 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/28 19:41:12 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/29 16:08:52 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,11 @@ t_queue		*find_way_one(t_rooms *end, int ant)
 
 int			iterate_ways(t_mult_q *mult, t_mult_q *i_mult, int *i, int *tmp)
 {
+	int	id_name;
+
 	if (!i_mult->queue)
 		print_error("Solving: no way found");
+	id_name = i_mult->queue->id_name;
 	if (*i)
 	{
 		if (i_mult->queue->id_name == mult->id_name)
@@ -93,11 +96,11 @@ int			iterate_ways(t_mult_q *mult, t_mult_q *i_mult, int *i, int *tmp)
 			(*i)++;
 			return (0);
 		}
-		mult->id_name = i_mult->queue->id_name;
 		mult->recalc = analyze_queue(mult, i_mult, tmp);
 		if (mult->recalc)
 			mult->lines = relevance(tmp, *i, &mult->iter_ants, i_mult->prev);
 	}
+	mult->id_name = id_name;
 	return (1);
 }
 

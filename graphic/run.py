@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 12:21:24 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/28 20:12:37 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/29 14:54:42 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ else:
 	# start, num_of_ants, ants_moves, graph = parse_all(sys.argv[1])
 
 end = find_node(graph, ants_moves[-1][-1].move)
-if len(graph) > 10:
+if len(graph) > 20:
 	print("BIG GRAPH")
 	exit()
 

@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 10:09:43 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/28 18:18:11 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/29 14:20:15 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,15 @@ int			dijkstra(t_rooms *begin_room)
 
 int			relevance(int *tmp, int i, int *ants, t_mult_q *mult)
 {
-	int	lines;
-
-	lines = 0;
 	if (*ants > 0)
 	{
-		if (!mult->end)
+		if (!mult->end && mult->queue->dist != 1)
 		{
 			tmp[i - 1] = mult->next->queue->dist - mult->queue->dist;
 			if ((i * tmp[i - 1]) >= *ants)
 			{
 				tmp[i - 1] = (*ants / i) + (*ants % i ? 1 : 0);
-				lines = tmp[i - 1] + mult->queue->dist - 1;
+				mult->lines = tmp[i - 1] + mult->queue->dist - 1;
 				*ants = 0;
 			}
 			else
@@ -118,9 +115,10 @@ int			relevance(int *tmp, int i, int *ants, t_mult_q *mult)
 		else
 		{
 			tmp[i - 1] = (*ants / i) + (*ants % i ? 1 : 0);
-			lines = tmp[i - 1] + mult->queue->dist - 1;
+			mult->lines = mult->queue->dist == 1 ? 1 : tmp[i - 1] +\
+			mult->queue->dist - 1;
 			*ants = 0;
 		}
 	}
-	return (lines);
+	return (mult->lines);
 }

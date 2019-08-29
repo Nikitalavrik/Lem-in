@@ -6,7 +6,7 @@
 #    By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/09 11:30:34 by nlavrine          #+#    #+#              #
-#    Updated: 2019/08/15 13:59:38 by nlavrine         ###   ########.fr        #
+#    Updated: 2019/08/29 15:17:08 by nlavrine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,7 +89,9 @@ class Game:
         font = pygame.font.SysFont('Calibri', 30)
         self.surface.blit(font.render("End - " + self.end.name, True, (255, 255, 0)), (10,50))
         font = pygame.font.SysFont('Calibri', 30)
-        self.surface.blit(font.render("Space - Step", True, (255, 255, 0)), (10,90))
+        self.surface.blit(font.render("Ants " + str(len(self.ants)), True, (255, 255, 0)), (10,90))
+        font = pygame.font.SysFont('Calibri', 30)
+        self.surface.blit(font.render("Space - Step", True, (255, 255, 0)), (10,130))
 
     def check_end(self):
         font = pygame.font.SysFont('Calibri', 35)

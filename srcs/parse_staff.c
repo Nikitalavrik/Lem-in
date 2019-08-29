@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 19:35:36 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/28 19:07:14 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/29 16:22:44 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,25 @@ void	if_end_start(t_rooms *main, char **line, t_rooms *begin, t_rooms *end)
 		print_error("Parsing error: find one more ##end");
 }
 
+void	check_ants(char *line)
+{
+	int i;
+
+	i = 0;
+	if (!ft_strcmp(line, "##start"))
+		print_error("Parsing error: start must be after number of ants");
+	if (!ft_strcmp(line, "##end"))
+		print_error("Parsing error: end must be after number of ants");
+	if (ft_get_index(line, '-'))
+		print_error("Parsing error: linking must be after number of ants");
+	if (ft_get_index(line, ' '))
+		print_error("Parsing error: init room must be after number of ants");
+	while (line[i])
+		i++;
+	if (i > 10)
+		print_error("Parsing error: bad number of ants");
+}
+
 t_rooms	*init_parse_data(char **line, int *ants, int *id, t_rooms *begin)
 {
 	*line = NULL;
@@ -50,14 +69,7 @@ t_rooms	*init_parse_data(char **line, int *ants, int *id, t_rooms *begin)
 		ft_memdel((void **)line);
 	}
 	begin->flags & 2 ? ft_putendl(*line) : 0;
-	if (!ft_strcmp(*line, "##start"))
-		print_error("Parsing error: start must be after number of ants");
-	if (!ft_strcmp(*line, "##end"))
-		print_error("Parsing error: end must be after number of ants");
-	if (ft_get_index(*line, '-'))
-		print_error("Parsing error: linking must be after number of ants");
-	if (ft_get_index(*line, ' '))
-		print_error("Parsing error: init room must be after number of ants");
+	check_ants(*line);
 	*ants = only_digit(*line) ? ft_atoi(*line) : *ants;
 	*ants <= 0 ? print_error("Parsing error: bad number of ants") : 0;
 	ft_memdel((void **)line);
@@ -82,18 +94,4 @@ void	check_split_len(char **splited)
 	len = ft_splitlen(splited);
 	if (len != 2)
 		print_error("Parsing error: bad number of linking node");
-}
-
-int		only_digit(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
 }

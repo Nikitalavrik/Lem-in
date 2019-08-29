@@ -6,7 +6,7 @@
 /*   By: nlavrine <nlavrine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 19:46:28 by nlavrine          #+#    #+#             */
-/*   Updated: 2019/08/28 18:27:58 by nlavrine         ###   ########.fr       */
+/*   Updated: 2019/08/29 16:24:14 by nlavrine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,18 @@ void		print_error(char *str)
 {
 	ft_printf("%s\n", str);
 	exit(0);
+}
+
+int			only_digit(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
